@@ -35,11 +35,10 @@
             </div>
             
             <nav class="hidden lg:flex space-x-2 text-sm font-semibold">
-                <button onclick="switchMainTab('scores')" id="nav-scores" class="px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20" data-i18n="tabScores">📊 即時比分與動態看台</button>
+                <button onclick="switchMainTab('scores')" id="nav-scores" class="px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20" data-i18n="tabScores">📊 即時比分與一球速報</button>
                 <button onclick="switchMainTab('standings')" id="nav-standings" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition" data-i18n="tabStandings">🏆 多聯盟戰績排行</button>
             </nav>
 
-            <!-- 右側連結與 5 國語言切換 -->
             <div class="flex items-center space-x-2">
                 <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="hidden sm:inline-block px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-zcGold text-black font-black text-xs shadow-lg hover:brightness-110 transition animate-pulse">
                     🎁 ZC 獨家開戶
@@ -75,7 +74,7 @@
             <div class="space-y-3 max-w-xl">
                 <span class="bg-zcGold/20 text-zcGold border border-zcGold/30 text-xs font-black px-3 py-1 rounded-full">SPECIAL EVENT</span>
                 <h1 class="text-2xl md:text-3xl font-black text-white">ZC 獨家首存尊榮優惠活動</h1>
-                <p class="text-xs text-slate-400 leading-relaxed">即刻加入 ZC 體育平台，享有全球最速串流數據與最高額度優惠返利！註冊即送專屬體育紅力禮金。</p>
+                <p class="text-xs text-slate-400 leading-relaxed">即刻加入 ZC 體育平台，享有全球最速串流數據與最高額度優惠返利！註冊即送專屬體育紅利禮金。</p>
                 <div class="pt-2 flex flex-wrap gap-3">
                     <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="px-5 py-2.5 rounded-xl bg-zcGold text-black font-black text-xs shadow-lg shadow-zcGold/20 hover:scale-105 transition">領取獨家活動優惠 ➔</a>
                     <a href="https://t.me/ZCYLC_Bot" target="_blank" class="px-5 py-2.5 rounded-xl bg-neutral-800 text-slate-200 border border-neutral-700 font-bold text-xs hover:bg-neutral-700 transition">開啟 Mini App</a>
@@ -89,11 +88,11 @@
             </div>
         </div>
 
-        <!-- 分頁一：即時比分與日系專業動態看台 -->
+        <!-- 分頁一：即時比分與日系一球速報動態看台 -->
         <div id="section-scores" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-6">
-                <!-- 動態看台主面板 (日系一球速報視覺化) -->
-                <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[500px]"></div>
+                <!-- 動態看台主面板 -->
+                <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[520px]"></div>
 
                 <!-- 賽事 Highlight 官方精華 -->
                 <div class="bg-zcCard p-6 rounded-3xl border gold-border">
@@ -107,8 +106,8 @@
                 </div>
             </div>
 
-            <!-- 右側：賽事切換清單 -->
-            <div class="bg-zcCard/80 rounded-3xl border gold-border p-5 flex flex-col h-[850px] backdrop-blur">
+            <!-- 右側：今日熱門賽事清單 (含日本棒球、MLB、NBA、足球) -->
+            <div class="bg-zcCard/80 rounded-3xl border gold-border p-5 flex flex-col h-[880px] backdrop-blur">
                 <div class="flex justify-between items-center mb-4 pb-3 border-b border-neutral-800">
                     <h2 class="text-sm font-black text-zcGold tracking-wider uppercase" data-i18n="matchListTitle">⚡ 今日熱門賽事看板</h2>
                     <span class="text-xs text-slate-400 bg-neutral-900 px-2.5 py-1 rounded-md">Live</span>
@@ -123,10 +122,10 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h2 class="text-xl font-black text-zcGold" data-i18n="standingsHeader">🏆 全球四大職業運動聯盟戰績排行</h2>
                     <div class="flex flex-wrap gap-2 text-xs">
-                        <button onclick="switchLeague('nba')" id="btn-league-nba" class="px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition">NBA</button>
-                        <button onclick="switchLeague('mlb')" id="btn-league-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700">MLB</button>
-                        <button onclick="switchLeague('npb')" id="btn-league-npb" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700">NPB</button>
-                        <button onclick="switchLeague('football')" id="btn-league-football" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700">Football</button>
+                        <button onclick="switchLeague('npb')" id="btn-league-npb" class="px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition">NPB 日職</button>
+                        <button onclick="switchLeague('mlb')" id="btn-league-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700">MLB 美職</button>
+                        <button onclick="switchLeague('nba')" id="btn-league-nba" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700">NBA 籃球</button>
+                        <button onclick="switchLeague('football')" id="btn-league-football" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700">Football 足球</button>
                     </div>
                 </div>
                 <div id="standings-content" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
@@ -148,7 +147,7 @@
     <script>
         const translations = {
             'zh-TW': {
-                tabScores: '📊 即時比分與動態看台',
+                tabScores: '📊 即時比分與一球速報',
                 tabStandings: '🏆 多聯盟戰績排行',
                 highlightTitle: '🎬 焦點賽事精華 Highlight',
                 matchListTitle: '⚡ 今日熱門賽事看板',
@@ -160,7 +159,7 @@
                 pct: '勝率 / 積分'
             },
             'zh-CN': {
-                tabScores: '📊 即时比分与动态看台',
+                tabScores: '📊 即时比分与一球速报',
                 tabStandings: '🏆 多联盟战绩排行',
                 highlightTitle: '🎬 焦点赛事精华 Highlight',
                 matchListTitle: '⚡ 今日热门赛事看板',
@@ -172,7 +171,7 @@
                 pct: '胜率 / 积分'
             },
             'en': {
-                tabScores: '📊 Live Scores & Dashboard',
+                tabScores: '📊 Live Scores & SportsNavi',
                 tabStandings: '🏆 Standings',
                 highlightTitle: '🎬 Match Highlights',
                 matchListTitle: '⚡ Featured Matches',
@@ -224,10 +223,11 @@
             switchLeague(currentLeague);
         }
 
-        // 包含完整日系一球速報與多局數比分板的賽事資料
+        // 包含 NPB 日本職棒 (第一順位)、MLB、NBA、足球的完整資料庫
         const sportsData = [
             {
                 id: 'npb1',
+                category: 'baseball',
                 type: 'NPB 日本職棒',
                 title: '讀賣巨人 vs 阪神虎',
                 status: '7 局下半 (1出局)',
@@ -235,15 +235,15 @@
                 inningScores: {
                     teams: ['讀賣巨人 (客)', '阪神虎 (主)'],
                     scores: [
-                        [0, 1, 0, 0, 1, 0, 0, 'X', 'X'], // 巨人
-                        [1, 0, 2, 0, 0, 0, 1, 'X', 'X']  // 阪神
+                        [0, 1, 0, 0, 1, 0, 0, 'X', 'X'],
+                        [1, 0, 2, 0, 0, 0, 1, 'X', 'X']
                     ],
                     stats: [ [2, 6, 0], [4, 8, 1] ] // R, H, E
                 },
                 details: {
                     pitcher: { name: '戸郷 翔征', era: '2.14', pitches: '98 球', stats: '6.1局 7K 2保送' },
                     batter: { name: '佐藤 輝明', avg: '.285', today: '3打數 2安打 (1全壘打 2打點)' },
-                    lastPitch: '⚡ 第 5 球: 152 km/h 直球 (好球命中 - 揮棒落空)',
+                    lastPitch: '⚡ 第 5 球: 152 km/h 直球 (好球命中 - 揮棒落空K)',
                     bso: { balls: 2, strikes: 2, outs: 1 },
                     bases: [true, false, true] // 一壘、三壘有人
                 },
@@ -251,6 +251,7 @@
             },
             {
                 id: 'mlb1',
+                category: 'baseball',
                 type: 'MLB 美國職棒',
                 title: '洛杉磯道奇 vs 紐約洋基',
                 status: '8 局上半 (2出局)',
@@ -274,7 +275,8 @@
             },
             {
                 id: 'nba1',
-                type: 'NBA 籃球',
+                category: 'basketball',
+                type: 'NBA 美職籃',
                 title: '洛杉磯湖人 vs 波士頓塞爾提克',
                 status: '第 4 節 02:15',
                 score: '108 - 105',
@@ -283,7 +285,7 @@
                     fouls: '團隊犯規 | 湖人: 3 | 綠衫軍: 4',
                     timeouts: '剩餘暫停 | 湖人: 2 | 綠衫軍: 1',
                     topScorer: '🔥 得分王: LeBron James (32 PTS, 8 AST, 9 REB)',
-                    lastAction: '三分球空心入網 (左側 45 度角)',
+                    lastAction: '詹姆斯 三分球空心入網 (左側 45 度角)',
                     shots: [
                         {x: '25%', y: '35%', hit: true},
                         {x: '50%', y: '20%', hit: true},
@@ -292,15 +294,30 @@
                     ]
                 },
                 highlightUrl: 'https://www.youtube.com/embed/3JZ_D3ELwOQ'
+            },
+            {
+                id: 'football1',
+                category: 'football',
+                type: '歐洲冠軍聯賽',
+                title: '皇家馬德里 vs 巴塞隆納',
+                status: '下半場 82\'',
+                score: '2 - 1',
+                details: {
+                    possessionRate: '控球率: 52% - 48%',
+                    shotsTotal: '射門數 (射正): 14(7) - 11(5)',
+                    foulsCards: '🟨 黃牌: 2 - 3 | 🟥 紅牌: 0 - 0',
+                    lastEvent: '80\' 莫德里奇助攻，貝林漢姆頭球破門！'
+                },
+                highlightUrl: 'https://www.youtube.com/embed/3JZ_D3ELwOQ'
             }
         ];
 
         const standingsData = {
-            nba: {
-                title1: '東區聯盟 (Eastern Conference)',
-                title2: '西區聯盟 (Western Conference)',
-                col1: [{rank: 1, name: '塞爾提克', win: 52, lose: 15, pct: '.776'}, {rank: 2, name: '紐約尼克', win: 45, lose: 22, pct: '.672'}],
-                col2: [{rank: 1, name: '丹佛金塊', win: 48, lose: 20, pct: '.706'}, {rank: 2, name: '明尼蘇達灰狼', win: 46, lose: 21, pct: '.687'}]
+            npb: {
+                title1: '日本職棒 - 中央聯盟 (Central League)',
+                title2: '日本職棒 - 太平洋聯盟 (Pacific League)',
+                col1: [{rank: 1, name: '阪神虎', win: 81, lose: 59, pct: '.579'}, {rank: 2, name: '讀賣巨人', win: 77, lose: 59, pct: '.566'}, {rank: 3, name: '橫濱DeNA', win: 71, lose: 69, pct: '.507'}],
+                col2: [{rank: 1, name: '福岡軟銀鷹', win: 88, lose: 52, pct: '.629'}, {rank: 2, name: '日本火腿', win: 75, lose: 60, pct: '.556'}, {rank: 3, name: '羅德海洋', win: 71, lose: 66, pct: '.518'}]
             },
             mlb: {
                 title1: '美國聯盟 (American League)',
@@ -308,11 +325,11 @@
                 col1: [{rank: 1, name: '紐約洋基', win: 94, lose: 68, pct: '.580'}, {rank: 2, name: '金鶯', win: 91, lose: 71, pct: '.562'}],
                 col2: [{rank: 1, name: '洛杉磯道奇', win: 98, lose: 64, pct: '.605'}, {rank: 2, name: '費城人', win: 95, lose: 67, pct: '.586'}]
             },
-            npb: {
-                title1: '中央聯盟 (Central League)',
-                title2: '太平洋聯盟 (Pacific League)',
-                col1: [{rank: 1, name: '阪神虎', win: 81, lose: 59, pct: '.579'}, {rank: 2, name: '讀賣巨人', win: 77, lose: 59, pct: '.566'}],
-                col2: [{rank: 1, name: '軟銀鷹', win: 88, lose: 52, pct: '.629'}, {rank: 2, name: '日本火腿', win: 75, lose: 60, pct: '.556'}]
+            nba: {
+                title1: '東區聯盟 (Eastern Conference)',
+                title2: '西區聯盟 (Western Conference)',
+                col1: [{rank: 1, name: '塞爾提克', win: 52, lose: 15, pct: '.776'}, {rank: 2, name: '紐約尼克', win: 45, lose: 22, pct: '.672'}],
+                col2: [{rank: 1, name: '丹佛金塊', win: 48, lose: 20, pct: '.706'}, {rank: 2, name: '明尼蘇達灰狼', win: 46, lose: 21, pct: '.687'}]
             },
             football: {
                 title1: '英格蘭超級聯賽 (Premier League)',
@@ -323,27 +340,27 @@
         };
 
         let currentMatch = sportsData[0];
-        let currentLeague = 'nba';
+        let currentLeague = 'npb';
 
-        // 渲染日系視覺與多維度數據動態看板
+        // 渲染日系 SportsNavi 級別動態看板
         function renderVisualBoard(match) {
             const board = document.getElementById('visual-board');
             
-            if (match.type.includes('棒球')) {
+            if (match.category === 'baseball') {
                 const s = match.inningScores;
                 board.innerHTML = `
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚾ ${match.type} 一球速報 Live</span>
+                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚾ ${match.type} 一球速報 (SportsNavi 視覺)</span>
                         <span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span>
                     </div>
 
-                    <!-- 1. 日系 9 局比分板 (Inning Scoreboard) -->
-                    <div class="overflow-x-auto my-3">
+                    <!-- 1. 日系 9 局比分板 -->
+                    <div class="overflow-x-auto my-3 bg-neutral-950 p-3 rounded-2xl border border-neutral-800">
                         <table class="w-full text-center text-xs border-collapse">
                             <thead>
-                                <tr class="bg-neutral-900 text-slate-400 border-b border-neutral-800">
-                                    <th class="p-2 text-left font-semibold">球隊</th>
-                                    ${[1,2,3,4,5,6,7,8,9].map(i => `<th class="p-2 w-7">${i}</th>`).join('')}
+                                <tr class="text-slate-400 border-b border-neutral-800">
+                                    <th class="p-2 text-left font-bold text-zcGold">球隊</th>
+                                    ${[1,2,3,4,5,6,7,8,9].map(i => `<th class="p-1.5 w-7">${i}</th>`).join('')}
                                     <th class="p-2 text-zcGold font-bold">R</th>
                                     <th class="p-2">H</th>
                                     <th class="p-2">E</th>
@@ -351,16 +368,16 @@
                             </thead>
                             <tbody class="divide-y divide-neutral-800/60 font-semibold text-slate-200">
                                 <tr>
-                                    <td class="p-2 text-left text-white">${s.teams[0]}</td>
-                                    ${s.scores[0].map(v => `<td class="p-2">${v}</td>`).join('')}
-                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900/40">${s.stats[0][0]}</td>
+                                    <td class="p-2 text-left font-bold text-white">${s.teams[0]}</td>
+                                    ${s.scores[0].map(v => `<td class="p-1.5">${v}</td>`).join('')}
+                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[0][0]}</td>
                                     <td class="p-2">${s.stats[0][1]}</td>
                                     <td class="p-2 text-slate-400">${s.stats[0][2]}</td>
                                 </tr>
                                 <tr>
-                                    <td class="p-2 text-left text-white">${s.teams[1]}</td>
-                                    ${s.scores[1].map(v => `<td class="p-2">${v}</td>`).join('')}
-                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900/40">${s.stats[1][0]}</td>
+                                    <td class="p-2 text-left font-bold text-white">${s.teams[1]}</td>
+                                    ${s.scores[1].map(v => `<td class="p-1.5">${v}</td>`).join('')}
+                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[1][0]}</td>
                                     <td class="p-2">${s.stats[1][1]}</td>
                                     <td class="p-2 text-slate-400">${s.stats[1][2]}</td>
                                 </tr>
@@ -368,66 +385,85 @@
                         </table>
                     </div>
 
-                    <!-- 2. 中央對決面板 (壘包 + BSO + 投打數據) -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 items-center bg-neutral-900/60 p-4 rounded-2xl border border-neutral-800">
+                    <!-- 2. 中央球場、壘包、BSO 燈號與投打數據 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 items-center bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800">
                         <!-- 投手資訊 -->
-                        <div class="space-y-1 text-xs text-slate-300">
-                            <span class="text-[10px] font-bold text-zcGold uppercase">Pitcher (投手)</span>
+                        <div class="space-y-1.5 text-xs text-slate-300">
+                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">PITCHER 投手</span>
                             <div class="text-sm font-bold text-white">${match.details.pitcher.name}</div>
-                            <div>ERA: <span class="text-zcGold font-semibold">${match.details.pitcher.era}</span> | ${match.details.pitcher.pitches}</div>
+                            <div>防禦率 ERA: <span class="text-zcGold font-bold">${match.details.pitcher.era}</span></div>
+                            <div>用球數: <span class="text-slate-200 font-semibold">${match.details.pitcher.pitches}</span></div>
                             <div class="text-[11px] text-slate-400">${match.details.pitcher.stats}</div>
                         </div>
 
-                        <!-- 壘包與 BSO 燈號 (中央視覺) -->
+                        <!-- 草地綠壘包與 BSO 燈號 -->
                         <div class="flex flex-col items-center justify-center space-y-3">
-                            <div class="relative w-20 h-20 rotate-45 border-2 border-neutral-700 bg-neutral-950 shadow-inner">
-                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 -rotate-45 ${match.details.bases[1] ? 'bg-zcGold shadow-md shadow-zcGold' : 'bg-neutral-800'} border border-neutral-600"></div>
-                                <div class="absolute top-1/2 -left-3 -translate-y-1/2 w-5 h-5 -rotate-45 ${match.details.bases[2] ? 'bg-zcGold shadow-md shadow-zcGold' : 'bg-neutral-800'} border border-neutral-600"></div>
-                                <div class="absolute top-1/2 -right-3 -translate-y-1/2 w-5 h-5 -rotate-45 ${match.details.bases[0] ? 'bg-zcGold shadow-md shadow-zcGold' : 'bg-neutral-800'} border border-neutral-600"></div>
+                            <div class="relative w-22 h-22 rotate-45 border-2 border-emerald-600/50 bg-emerald-950/40 p-2 shadow-inner rounded-lg">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 -rotate-45 ${match.details.bases[1] ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-neutral-600"></div>
+                                <div class="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 -rotate-45 ${match.details.bases[2] ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-neutral-600"></div>
+                                <div class="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 -rotate-45 ${match.details.bases[0] ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-neutral-600"></div>
                             </div>
                             
-                            <!-- BSO 燈號 -->
-                            <div class="flex space-x-3 text-[11px] font-bold">
-                                <div class="flex items-center space-x-1"><span class="text-slate-400">B:</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 1 ? 'bg-emerald-500' : 'bg-neutral-700'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 2 ? 'bg-emerald-500' : 'bg-neutral-700'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 3 ? 'bg-emerald-500' : 'bg-neutral-700'}"></span></div>
-                                <div class="flex items-center space-x-1"><span class="text-slate-400">S:</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.strikes >= 1 ? 'bg-amber-500' : 'bg-neutral-700'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.strikes >= 2 ? 'bg-amber-500' : 'bg-neutral-700'}"></span></div>
-                                <div class="flex items-center space-x-1"><span class="text-slate-400">O:</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.outs >= 1 ? 'bg-red-500' : 'bg-neutral-700'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.outs >= 2 ? 'bg-red-500' : 'bg-neutral-700'}"></span></div>
+                            <!-- BSO 專業發光燈號 -->
+                            <div class="flex space-x-3 text-xs font-bold bg-neutral-950 px-3 py-1.5 rounded-xl border border-neutral-800">
+                                <div class="flex items-center space-x-1"><span class="text-slate-400">B</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 1 ? 'bg-emerald-400 shadow-md shadow-emerald-400' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 2 ? 'bg-emerald-400 shadow-md shadow-emerald-400' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 3 ? 'bg-emerald-400 shadow-md shadow-emerald-400' : 'bg-neutral-800'}"></span></div>
+                                <div class="flex items-center space-x-1"><span class="text-slate-400">S</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.strikes >= 1 ? 'bg-amber-400 shadow-md shadow-amber-400' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.strikes >= 2 ? 'bg-amber-400 shadow-md shadow-amber-400' : 'bg-neutral-800'}"></span></div>
+                                <div class="flex items-center space-x-1"><span class="text-slate-400">O</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.outs >= 1 ? 'bg-red-500 shadow-md shadow-red-500' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.outs >= 2 ? 'bg-red-500 shadow-md shadow-red-500' : 'bg-neutral-800'}"></span></div>
                             </div>
                         </div>
 
                         <!-- 打者資訊 -->
-                        <div class="space-y-1 text-xs text-slate-300 text-left md:text-right">
-                            <span class="text-[10px] font-bold text-zcGold uppercase">Batter (打者)</span>
+                        <div class="space-y-1.5 text-xs text-slate-300 text-left md:text-right">
+                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">BATTER 打者</span>
                             <div class="text-sm font-bold text-white">${match.details.batter.name}</div>
-                            <div>AVG: <span class="text-zcGold font-semibold">${match.details.batter.avg}</span></div>
+                            <div>打擊率 AVG: <span class="text-zcGold font-bold">${match.details.batter.avg}</span></div>
                             <div class="text-[11px] text-slate-400">${match.details.batter.today}</div>
                         </div>
                     </div>
 
-                    <!-- 3. 最新一球速報動態 -->
-                    <div class="text-xs text-center text-zcGold bg-neutral-900 p-3 rounded-xl border border-neutral-800">
+                    <!-- 3. 最新一球球速與動態 -->
+                    <div class="text-xs text-center font-bold text-zcGold bg-neutral-900 p-3 rounded-xl border border-neutral-800">
                         ${match.details.lastPitch}
                     </div>
                 `;
-            } else if (match.type.includes('籃球')) {
+            } else if (match.category === 'basketball') {
                 board.innerHTML = `
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">🏀 ${match.type}</span>
+                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">🏀 ${match.type} 戰術看台</span>
                         <span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span>
                     </div>
                     <div class="text-center my-2">
                         <div class="text-xl md:text-2xl font-black text-white">${match.title}</div>
                         <div class="text-3xl md:text-4xl font-black text-zcGold gold-glow my-1">${match.score}</div>
                     </div>
-                    <div class="relative w-full h-44 bg-amber-950/20 rounded-2xl border-2 border-amber-600/30 my-3 overflow-hidden flex items-center justify-center">
+                    <div class="relative w-full h-48 bg-amber-950/20 rounded-2xl border-2 border-amber-600/30 my-3 overflow-hidden flex items-center justify-center">
                         <div class="absolute w-28 h-28 rounded-full border-2 border-amber-500/20"></div>
                         ${match.details.shots.map(s => `
-                            <div class="absolute w-4 h-4 rounded-full ${s.hit ? 'bg-emerald-500' : 'bg-red-500'} flex items-center justify-center text-[8px] font-bold text-black" style="left: ${s.x}; top: ${s.y};">
+                            <div class="absolute w-4 h-4 rounded-full ${s.hit ? 'bg-emerald-500 shadow-md shadow-emerald-500' : 'bg-red-500'} flex items-center justify-center text-[8px] font-bold text-black" style="left: ${s.x}; top: ${s.y};">
                                 ${s.hit ? '✓' : '✕'}
                             </div>
                         `).join('')}
                     </div>
                     <div class="text-xs text-center text-zcGold bg-neutral-900/80 p-2.5 rounded-xl border border-neutral-800">
                         ⭐ ${match.details.topScorer}
+                    </div>
+                `;
+            } else {
+                board.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚽ ${match.type} 數據中心</span>
+                        <span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span>
+                    </div>
+                    <div class="text-center my-3">
+                        <div class="text-xl md:text-2xl font-black text-white">${match.title}</div>
+                        <div class="text-3xl md:text-4xl font-black text-zcGold gold-glow my-2">${match.score}</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs my-4">
+                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">${match.details.possessionRate}</div>
+                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">${match.details.shotsTotal}</div>
+                    </div>
+                    <div class="text-xs text-center text-zcGold bg-neutral-900/80 p-2.5 rounded-xl border border-neutral-800">
+                        ⚡ ${match.details.lastEvent}
                     </div>
                 `;
             }
@@ -471,13 +507,13 @@
                 standingsSec.classList.remove('hidden');
                 navStandings.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
                 navScores.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
-                switchLeague('nba');
+                switchLeague('npb');
             }
         }
 
         function switchLeague(leagueKey) {
             currentLeague = leagueKey;
-            ['nba', 'mlb', 'npb', 'football'].forEach(l => {
+            ['npb', 'mlb', 'nba', 'football'].forEach(l => {
                 const btn = document.getElementById(`btn-league-${l}`);
                 if (l === leagueKey) {
                     btn.className = "px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition";
