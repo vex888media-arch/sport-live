@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZC SPORT - 頂級全球體育賽事直播中心</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DPlayer 播放器 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zcGold: '#d4af37',
+                        zcDark: '#08080a',
+                        zcCard: '#121216',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #08080a; color: #f3f4f6; font-family: system-ui, sans-serif; }
+        .gold-glow { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .gold-border { border-color: rgba(212, 175, 55, 0.3); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-zcGold selection:text-black">
+
+    <!-- 頂部 ZC 風格導航欄 -->
+    <header class="bg-zcDark/90 border-b gold-border sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-3 h-3 bg-zcGold rounded-full animate-ping"></div>
+                <span class="text-2xl font-black tracking-widest text-white">ZC <span class="text-zcGold gold-glow">SPORT</span></span>
+            </div>
+            
+            <!-- 賽事分類選單 -->
+            <nav class="hidden md:flex space-x-2 text-sm font-semibold">
+                <button onclick="filterCategory('world')" class="px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20">🔥 世界重磅大賽</button>
+                <button onclick="filterCategory('nba')" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition">NBA 籃球</button>
+                <button onclick="filterCategory('football')" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition">歐洲足球</button>
+                <button onclick="filterCategory('mlb')" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition">MLB 美職</button>
+                <button onclick="filterCategory('npb')" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition">日本棒球</button>
+            </nav>
+
+            <!-- 語系與狀態 -->
+            <div class="flex items-center space-x-3">
+                <span class="hidden lg:inline-block text-xs px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold animate-pulse">● 24H 穩定聯機</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+        
+        <!-- 左側：頂級播放器與當前賽事資訊 (佔 2 欄) -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- 播放器框 -->
+            <div class="bg-zcCard rounded-3xl overflow-hidden shadow-2xl border gold-border relative">
+                <div id="dplayer" class="w-full aspect-video"></div>
+            </div>
+
+            <!-- 賽事詳情面板 -->
+            <div class="bg-zcCard/80 p-6 rounded-3xl border gold-border backdrop-blur">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span id="match-badge" class="bg-zcGold/20 text-zcGold text-xs font-bold px-3 py-1 rounded-full border border-zcGold/30">WORLD EVENT</span>
+                            <span class="text-xs text-slate-400">畫質: 1080P Ultra HD (低延遲)</span>
+                        </div>
+                        <h1 id="match-title" class="text-2xl font-black mt-2 text-white">載入中...</h1>
+                        <p id="match-desc" class="text-xs text-slate-400 mt-1">正在連接全球最穩定體育高速節點...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側：全球賽事直播列表 (佔 1 欄) -->
+        <div class="bg-zcCard/80 rounded-3xl border gold-border p-5 flex flex-col h-[620px] backdrop-blur">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-neutral-800">
+                <h2 class="text-sm font-black text-zcGold tracking-wider uppercase">⚡ 全球即時賽事列表</h2>
+                <span id="match-count" class="text-xs text-slate-400 bg-neutral-900 px-2 py-1 rounded-md">0 場在線</span>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto space-y-3 pr-1" id="match-list">
+                <!-- 動態生成的賽事卡片 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部 ZC 風格版權 -->
+    <footer class="bg-zcDark border-t border-neutral-900 py-6 text-center text-xs text-slate-500">
+        <p>© 2026 ZC SPORT GLOBAL. All Rights Reserved. Designed for Elite Sports Fans.</p>
+    </footer>
+
+    <!-- 影音與播放器核心 -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+    <script>
+        const matchesData = [
+            {
+                id: 'w1',
+                category: 'world',
+                badge: '世界盃 / 國際大賽專區',
+                title: 'FIFA World Cup - Global Elite Broadcast',
+                desc: '最高規格世界級頂尖賽事轉播，零卡頓高畫質呈現。',
+                time: 'LIVE',
+                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            },
+            {
+                id: 'nba1',
+                category: 'nba',
+                badge: 'NBA 總冠軍賽級別',
+                title: 'NBA Finals: Eastern vs Western Conference',
+                desc: '頂級籃球盛宴，全場次高畫質即時轉播。',
+                time: 'LIVE',
+                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            },
+            {
+                id: 'f1',
+                category: 'football',
+                badge: '歐洲足球五大聯賽',
+                title: 'UEFA Champions League - Elite Match',
+                desc: '歐冠決賽級別對決，極速穩定串流源。',
+                time: '21:00 UTC',
+                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            },
+            {
+                id: 'mlb1',
+                category: 'mlb',
+                badge: 'MLB 美國職棒大聯盟',
+                title: 'MLB Regular Season - Spotlight Game',
+                desc: '美國職棒頂尖強隊對決，即時比分與高畫質直播。',
+                time: 'LIVE',
+                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            },
+            {
+                id: 'npb1',
+                category: 'npb',
+                badge: '日本職棒 NPB',
+                title: 'Nippon Professional Baseball - Climax Series',
+                desc: '日本職棒火熱對決，熱血燃燒。',
+                time: '18:00 UTC',
+                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+            }
+        ];
+
+        let dp = null;
+
+        function initPlayer(url) {
+            if (dp) dp.destroy();
+            dp = new DPlayer({
+                container: document.getElementById('dplayer'),
+                autoplay: true,
+                theme: '#d4af37',
+                video: {
+                    url: url,
+                    type: 'hls'
+                }
+            });
+        }
+
+        function renderMatches(filter = 'world') {
+            const listEl = document.getElementById('match-list');
+            listEl.innerHTML = '';
+            
+            const filtered = filter === 'all' ? matchesData : matchesData.filter(m => m.category === filter || (filter === 'world' && m.category === 'world'));
+            
+            document.getElementById('match-count').innerText = `${matchesData.length} 場賽事`;
+
+            matchesData.forEach(m => {
+                const item = document.createElement('div');
+                item.className = "p-3.5 bg-neutral-900/60 hover:bg-neutral-900 rounded-2xl cursor-pointer border border-neutral-800 hover:border-zcGold/50 transition flex justify-between items-center group";
+                item.onclick = () => selectMatch(m);
+                item.innerHTML = `
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-zcGold uppercase tracking-wider">${m.badge}</span>
+                        <div class="text-sm font-bold text-slate-200 group-hover:text-zcGold transition line-clamp-1">${m.title}</div>
+                    </div>
+                    <span class="text-[10px] font-bold bg-neutral-800 text-slate-300 px-2.5 py-1 rounded-lg border border-neutral-700">${m.time}</span>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        function selectMatch(match) {
+            document.getElementById('match-badge').innerText = match.badge;
+            document.getElementById('match-title').innerText = match.title;
+            document.getElementById('match-desc').innerText = match.desc;
+            initPlayer(match.url);
+        }
+
+        function filterCategory(cat) {
+            renderMatches(cat);
+        }
+
+        window.onload = () => {
+            renderMatches('world');
+            selectMatch(matchesData[0]);
+        };
+    </script>
+</body>
+</html>
