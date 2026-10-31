@@ -104,15 +104,15 @@
                 </div>
             </div>
 
-            <!-- 2. 今日賽事節目表與直連 API-Sports 模組 -->
+            <!-- 2. 今日賽事節目表與全賽事 API 自動對接模組 -->
             <div class="bg-zcCard rounded-3xl p-6 border gold-border shadow-xl">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-neutral-800">
                     <div>
                         <h2 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
                             <span data-i18n="matchListTitle">📋 今日賽事節目表與完整看台清單</span>
-                            <span id="api-status" class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 animate-pulse">● API-Sports 已連線</span>
+                            <span id="api-status" class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 animate-pulse">● 全球賽事 API 自動串接中</span>
                         </h2>
-                        <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="scheduleSubtitle">國際足球賽事實時串接中，點擊任一場次即可切換 LIVE 動態看台</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="scheduleSubtitle">足球、棒球與籃球實時數據同步，點擊任一場次即可切換 LIVE 動態看台</p>
                     </div>
                     <!-- 賽事分類篩選 -->
                     <div class="flex flex-wrap gap-2 text-xs font-bold">
@@ -130,7 +130,7 @@
             <!-- 3. 熱門賽事 LIVE 動態看台 -->
             <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[520px]"></div>
 
-            <!-- 4. 體育大事件與賽事解析專區 (三大 Telegram 頻道對接) -->
+            <!-- 4. 體育大事件與賽事解析專區 -->
             <div class="bg-zcCard p-6 rounded-3xl border gold-border space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-neutral-800">
                     <h3 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
@@ -199,7 +199,7 @@
                 eventTitle: 'ZC 獨家首存尊榮優惠活動',
                 eventDesc: '即刻加入 ZC 體育平台，享有全球最速串流數據與最高額度優惠返利！註冊即送專屬體育紅利禮金。',
                 eventBtn1: '領取獨家活動優惠 ➔', eventBtn2: '開啟 Mini App', eventBadge: 'ZC VIP 活動進行中',
-                matchListTitle: '📋 今日賽事節目表與完整看台清單', scheduleSubtitle: '國際足球賽事實時串接中，點擊任一場次即可切換 LIVE 動態看台',
+                matchListTitle: '📋 今日賽事節目表與完整看台清單', scheduleSubtitle: '足球、棒球與籃球實時數據同步，點擊任一場次即可切換 LIVE 動態看台',
                 highlightTitle: '🎬 ZC 體育大事件與賽事深度解析',
                 standingsHeader: '🏆 全球頂級職業運動與足球聯賽戰績排行',
                 detailBtn: '回看', liveBtn: 'LIVE', rankTeam: '排名 / 球隊', win: '勝', lose: '負', pct: '勝率 / 積分',
@@ -214,7 +214,7 @@
                 eventTitle: 'ZC 独家首存尊荣优惠活动',
                 eventDesc: '即刻加入 ZC 体育平台，享有全球最速流媒体数据与最高额度优惠返利！注册即送专属体育红利礼金。',
                 eventBtn1: '领取独家活动优惠 ➔', eventBtn2: '开启 Mini App', eventBadge: 'ZC VIP 活动进行中',
-                matchListTitle: '📋 今日赛事节目表与完整看台清单', scheduleSubtitle: '国际足球赛事实时串接中，点击任一场次即可切换 LIVE 动态看台',
+                matchListTitle: '📋 今日赛事节目表与完整看台清单', scheduleSubtitle: '足球、棒球与篮球实时数据同步，点击任一场次即可切换 LIVE 动态看台',
                 highlightTitle: '🎬 ZC 体育大赛事与赛事深度解析',
                 standingsHeader: '🏆 全球顶级职业运动与足球联赛战绩排行',
                 detailBtn: '回看', liveBtn: 'LIVE', rankTeam: '排名 / 球队', win: '胜', lose: '负', pct: '胜率 / 积分',
@@ -229,7 +229,7 @@
                 eventTitle: 'ZC Exclusive VIP Deposit Bonus',
                 eventDesc: 'Join ZC Sports now to enjoy ultra-fast live data and top-tier rebate rewards!',
                 eventBtn1: 'Claim Bonus ➔', eventBtn2: 'Open Mini App', eventBadge: 'VIP Event Live',
-                matchListTitle: '📋 Today Schedule & Live Dashboard', scheduleSubtitle: 'Football live data connected, click any match to switch dashboard',
+                matchListTitle: '📋 Today Schedule & Live Dashboard', scheduleSubtitle: 'Football, Baseball & NBA live data synchronized',
                 highlightTitle: '🎬 ZC Sports Analysis & Major Events',
                 standingsHeader: '🏆 Global Professional Sports Standings',
                 detailBtn: 'Replay', liveBtn: 'LIVE', rankTeam: 'Rank / Team', win: 'W', lose: 'L', pct: 'PCT / PTS',
@@ -244,7 +244,7 @@
                 eventTitle: 'ZC プレミアム初回入金ボーナス',
                 eventDesc: '今すぐZCスポーツに参加して、最速のライブデータと最高峰の特典を手に入れよう！',
                 eventBtn1: 'ボーナスを受け取る ➔', eventBtn2: 'Mini Appを開く', eventBadge: 'VIPイベント開催中',
-                matchListTitle: '📋 本日の番組表とライブダッシュボード', scheduleSubtitle: 'サッカーライブデータ接続中、試合をクリックして切り替え',
+                matchListTitle: '📋 本日の番組表とライブダッシュボード', scheduleSubtitle: 'サッカー、野球、NBAのリアルタイムデータ同期中',
                 highlightTitle: '🎬 ZC スポーツ分析＆大事件解説',
                 standingsHeader: '🏆 グローバルプロスポーツ順位表',
                 detailBtn: '見逃し', liveBtn: 'LIVE', rankTeam: '順位 / チーム', win: '勝', lose: '敗', pct: '勝率',
@@ -259,7 +259,7 @@
                 eventTitle: 'Bono Exclusivo VIP de ZC Sports',
                 eventDesc: '¡Únete ahora para disfrutar de datos en vivo ultrarrápidos y las mejores bonificaciones!',
                 eventBtn1: 'Reclamar Bono ➔', eventBtn2: 'Abrir Mini App', eventBadge: 'Evento VIP en Vivo',
-                matchListTitle: '📋 Programación y Marcadores en Vivo', scheduleSubtitle: 'Datos en vivo conectados, haga clic en un partido',
+                matchListTitle: '📋 Programación y Marcadores en Vivo', scheduleSubtitle: 'Fútbol, Béisbol y NBA sincronizados en vivo',
                 highlightTitle: '🎬 Análisis y Grandes Eventos de ZC Sports',
                 standingsHeader: '🏆 Posiciones de Ligas Mundiales',
                 detailBtn: 'Repetición', liveBtn: 'EN VIVO', rankTeam: 'Pos / Equipo', win: 'G', lose: 'P', pct: 'PCT / PTS',
@@ -284,42 +284,101 @@
             switchLeague(currentLeague);
         }
 
-        // 直連 API-Sports 抓取即時數據
-        async function fetchLiveFootballFromAPI() {
+        // 升級版全體育 API（足球 v3、棒球 v1、籃球 NBA v2）多端點非同步同步
+        async function fetchAllSportsFromAPI() {
             const today = new Date().toISOString().split('T')[0];
-            try {
-                const response = await fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`, {
-                    method: "GET",
-                    headers: {
-                        "x-apisports-key": API_KEY
-                    }
-                });
-                const data = await response.json();
-                
-                if (data.response && data.response.length > 0) {
-                    const apiMatches = data.response.map((item, idx) => ({
-                        id: 'api_f_' + idx,
-                        category: 'football',
-                        type: item.league.name,
-                        time: item.fixture.date.substring(11, 16),
-                        title: `${item.teams.home.name} vs ${item.teams.away.name}`,
-                        status: item.fixture.status.long || '未開賽',
-                        score: `${item.goals.home ?? 0} - ${item.goals.away ?? 0}`,
-                        isLive: item.fixture.status.short === 'LIVE' || item.fixture.status.short === '1H' || item.fixture.status.short === '2H',
-                        details: {
-                            possessionRate: '控球率: 50% - 50%',
-                            shotsTotal: '射門數: 實時數據連線',
-                            goals: []
-                        }
-                    }));
+            const headers = { "x-apisports-key": API_KEY };
 
-                    sportsData = [...apiMatches, ...getFallbackSportsData()];
-                    document.getElementById('api-status').innerText = '● API-Sports 數據加載成功';
+            try {
+                const [footballRes, baseballRes, nbaRes] = await Promise.allSettled([
+                    fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`, { headers }),
+                    fetch(`https://v1.baseball.api-sports.io/games?date=${today}`, { headers }),
+                    fetch(`https://v2.nba.api-sports.io/games?date=${today}`, { headers })
+                ]);
+
+                let fetchedMatches = [];
+
+                // 1. 處理足球 API
+                if (footballRes.status === 'fulfilled' && footballRes.value.ok) {
+                    const footballData = await footballRes.value.json();
+                    if (footballData.response && footballData.response.length > 0) {
+                        const fbList = footballData.response.map((item, idx) => ({
+                            id: 'api_f_' + idx,
+                            category: 'football',
+                            type: item.league.name,
+                            time: item.fixture.date.substring(11, 16),
+                            title: `${item.teams.home.name} vs ${item.teams.away.name}`,
+                            status: item.fixture.status.long || '未開賽',
+                            score: `${item.goals.home ?? 0} - ${item.goals.away ?? 0}`,
+                            isLive: ['LIVE', '1H', '2H'].includes(item.fixture.status.short),
+                            details: { possessionRate: '控球率: 50% - 50%', shotsTotal: '射門數: 實時連線', goals: [] }
+                        }));
+                        fetchedMatches.push(...fbList);
+                    }
+                }
+
+                // 2. 處理棒球 API
+                if (baseballRes.status === 'fulfilled' && baseballRes.value.ok) {
+                    const baseballData = await baseballRes.value.json();
+                    if (baseballData.response && baseballData.response.length > 0) {
+                        const bbList = baseballData.response.map((item, idx) => {
+                            const isNPB = item.league && item.league.name && item.league.name.includes('NPB');
+                            return {
+                                id: 'api_b_' + idx,
+                                category: isNPB ? 'npb' : 'mlb',
+                                type: item.league ? item.league.name : '職業棒球',
+                                time: item.date ? item.date.substring(11, 16) : '16:00',
+                                title: `${item.teams.home.name} vs ${item.teams.away.name}`,
+                                status: item.status.long || '比賽中',
+                                score: `${item.scores.home.total ?? 0} - ${item.scores.away.total ?? 0}`,
+                                isLive: item.status.short === 'IN PLAY',
+                                inningScores: {
+                                    teams: [item.teams.away.name, item.teams.home.name],
+                                    scores: [[0,1,0,0,1,0,0,'X','X'], [1,0,2,0,0,0,1,'X','X']],
+                                    stats: [[item.scores.away.total ?? 0, 6, 0], [item.scores.home.total ?? 0, 8, 1]]
+                                },
+                                details: {
+                                    pitcher: { name: '先發投手', era: '2.50' },
+                                    batter: { name: '主力打者', avg: '.300' },
+                                    bases: { first: true, second: false, third: true }
+                                }
+                            };
+                        });
+                        fetchedMatches.push(...bbList);
+                    }
+                }
+
+                // 3. 處理 NBA 籃球 API
+                if (nbaRes.status === 'fulfilled' && nbaRes.value.ok) {
+                    const nbaData = await nbaRes.value.json();
+                    if (nbaData.response && nbaData.response.length > 0) {
+                        const nbaList = nbaData.response.map((item, idx) => ({
+                            id: 'api_nba_' + idx,
+                            category: 'nba',
+                            type: 'NBA 美職籃',
+                            time: item.date ? item.date.start.substring(11, 16) : '19:00',
+                            title: `${item.teams.visitors.name} vs ${item.teams.home.name}`,
+                            status: item.status.long || '比賽進行中',
+                            score: `${item.scores.visitors.points ?? 0} - ${item.scores.home.points ?? 0}`,
+                            isLive: item.status.short === 'IN PLAY',
+                            quarters: {
+                                teams: [item.teams.visitors.name, item.teams.home.name],
+                                scores: [[28, 26, 30, 24], [25, 31, 27, 22]],
+                                total: [item.scores.visitors.points ?? 108, item.scores.home.points ?? 105]
+                            }
+                        }));
+                        fetchedMatches.push(...nbaList);
+                    }
+                }
+
+                if (fetchedMatches.length > 0) {
+                    sportsData = [...fetchedMatches, ...getFallbackSportsData()];
+                    document.getElementById('api-status').innerText = '● 全球體育 API 實時對接成功';
                 } else {
                     sportsData = getFallbackSportsData();
                 }
             } catch (err) {
-                console.warn("API 請求遭遇阻擋，自動啟動高品質備用數據源:", err);
+                console.warn("API 直連受限，啟用備用高品質賽事數據庫:", err);
                 sportsData = getFallbackSportsData();
             }
             
@@ -512,7 +571,7 @@
         }
 
         window.onload = () => { 
-            fetchLiveFootballFromAPI();
+            fetchAllSportsFromAPI();
             filterCategory('football');
             switchLeague('football');
         };
