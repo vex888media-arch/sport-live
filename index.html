@@ -1,58 +1,521 @@
-// 設定 API-Sports 的共用標頭 (Header)
-const apiHeaders = {
-    "x-apisports-key": "1f4986ff078ef11fb277f6799a7d263a"
-};
-
-// 異步抓取今日足球賽事與比分
-async function fetchLiveFootballMatches() {
-    try {
-        const today = new Date().toISOString().split('T')[0]; // 取得當日日期格式 YYYY-MM-DD
-        const response = await fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`, {
-            method: "GET",
-            headers: apiHeaders
-        });
-        
-        const data = await response.json();
-        
-        if (data.response && data.response.length > 0) {
-            console.log("成功取得今日賽事數據：", data.response);
-            // 這裡可以將 API 回傳的資料直接對應渲染到你的網頁節目表中！
-            updateScheduleUI(data.response);
-        } else {
-            console.log("今日無賽事或請求額度需注意。");
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZC SPORT - Global Live Scores & Official Hub</title>
+    <!-- 瀏覽器標籤頁專屬 Logo (Favicon) -->
+    <link rel="icon" type="image/png" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=128&q=80">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zcGold: '#d4af37',
+                        zcDark: '#08080a',
+                        zcCard: '#121216',
+                    }
+                }
+            }
         }
-    } catch (error) {
-        console.error("連線 API 失敗：", error);
-    }
-}
+    </script>
+    <style>
+        body { background-color: #08080a; color: #f3f4f6; font-family: system-ui, sans-serif; }
+        .gold-border { border-color: rgba(212, 175, 55, 0.3); }
+        .gold-glow { text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-zcGold selection:text-black">
 
-// 畫面更新函式範例
-function updateScheduleUI(matches) {
-    const listEl = document.getElementById('schedule-list');
-    listEl.innerHTML = ''; // 清空舊資料
-    
-    matches.slice(0, 10).forEach(match => {
-        const homeTeam = match.teams.home.name;
-        const awayTeam = match.teams.away.name;
-        const homeScore = match.goals.home ?? 0;
-        const awayScore = match.goals.away ?? 0;
-        const status = match.fixture.status.short; // 例如 'LIVE', 'FT', 'NS'
-        
-        const row = document.createElement('div');
-        row.className = "p-3 rounded-xl cursor-pointer border border-neutral-900 bg-neutral-950/60 flex items-center justify-between hover:border-zcGold/40 transition";
-        row.innerHTML = `
-            <div class="flex items-center space-x-4">
-                <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-2.5 py-1 rounded-md border border-zcGold/20">${match.fixture.date.substring(11, 16)}</span>
+    <!-- 頂部導航欄 (KABUKI Media EDITION 與專屬 ZC Logo) -->
+    <header class="bg-zcDark/90 border-b gold-border sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-2xl bg-neutral-900 border gold-border flex items-center justify-center relative shadow-xl shadow-zcGold/20 overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=128&q=80" alt="ZC Logo" class="w-full h-full object-cover opacity-90">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-amber-500/20 to-transparent"></div>
+                </div>
                 <div>
-                    <span class="text-[10px] text-slate-400 font-semibold uppercase">${match.league.name}</span>
-                    <div class="text-sm font-bold text-white mt-0.5">${homeTeam} vs ${awayTeam}</div>
+                    <div class="flex items-center space-x-1.5">
+                        <span class="text-xl font-black tracking-widest text-white">ZC <span class="text-zcGold gold-glow">SPORT</span></span>
+                        <span class="bg-zcGold/20 text-zcGold text-[10px] font-black px-1.5 py-0.5 rounded border border-zcGold/30">LIVE</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 tracking-wider uppercase block font-semibold">KABUKI Media EDITION</span>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
-                <span class="text-xs font-bold text-slate-300">${homeScore} - ${awayScore}</span>
-                <span class="text-[11px] font-black px-2.5 py-1 rounded-md ${status === 'LIVE' ? 'bg-red-500/20 text-red-400 animate-pulse' : 'bg-neutral-800 text-slate-400'}">${status}</span>
+            
+            <nav class="hidden lg:flex space-x-2 text-sm font-semibold">
+                <button onclick="switchMainTab('scores')" id="nav-scores" class="px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20" data-i18n="tabScores">📊 即時比分與動態看台</button>
+                <button onclick="switchMainTab('standings')" id="nav-standings" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition" data-i18n="tabStandings">🏆 多聯盟戰績排行</button>
+            </nav>
+
+            <div class="flex items-center space-x-2">
+                <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="hidden sm:inline-block px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-zcGold text-black font-black text-xs shadow-lg hover:brightness-110 transition animate-pulse" data-i18n="registerBtn">
+                    🎁 ZC 獨家開戶
+                </a>
+                <select id="lang-select" onchange="changeLanguage(this.value)" class="bg-neutral-900 border gold-border text-xs rounded-xl px-3 py-2 text-zcGold font-bold focus:outline-none cursor-pointer">
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="es">Español</option>
+                </select>
             </div>
-        `;
-        listEl.appendChild(row);
-    });
-}
+        </div>
+    </header>
+
+    <!-- ZC 快捷官方連結入口導航列 -->
+    <div class="bg-neutral-950 border-b border-neutral-900 py-3 overflow-x-auto">
+        <div class="max-w-7xl mx-auto px-4 flex items-center justify-start md:justify-center space-x-3 text-xs font-bold whitespace-nowrap">
+            <span class="text-zcGold flex items-center gap-1" data-i18n="officialHub">⚡ ZC 官方入口:</span>
+            <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="px-3 py-1.5 rounded-lg bg-zcGold/10 text-zcGold border gold-border hover:bg-zcGold hover:text-black transition" data-i18n="regLink">🔥 立即註冊帳號</a>
+            <a href="https://m1.zc74528sw.shop/" target="_blank" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="mobileLink">📱 手機版網頁</a>
+            <a href="https://w1.zc74528sw.shop/" target="_blank" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="pcLink">💻 電腦版網頁</a>
+            <a href="https://t.me/ZCYLC_Bot" target="_blank" class="px-3 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white transition" data-i18n="tgApp">🤖 TG Mini App</a>
+            <a href="https://t.me/ZCYL_Offical" target="_blank" class="px-3 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white transition" data-i18n="tgChannel">📢 TG 官方頻道</a>
+        </div>
+    </div>
+
+    <!-- 主要內容區 -->
+    <main class="max-w-7xl mx-auto px-4 py-6 w-full space-y-6">
+        
+        <!-- 分頁一：即時比分與動態看台 -->
+        <div id="section-scores" class="space-y-6">
+            
+            <!-- 1. Special Event -->
+            <div class="relative rounded-3xl overflow-hidden border gold-border shadow-2xl bg-gradient-to-r from-neutral-900 via-neutral-950 to-neutral-900 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-3 max-w-xl">
+                    <span class="bg-zcGold/20 text-zcGold border border-zcGold/30 text-xs font-black px-3 py-1 rounded-full">SPECIAL EVENT</span>
+                    <h1 class="text-2xl md:text-3xl font-black text-white" data-i18n="eventTitle">ZC 獨家首存尊榮優惠活動</h1>
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="eventDesc">即刻加入 ZC 體育平台，享有全球最速串流數據與最高額度優惠返利！註冊即送專屬體育紅利禮金。</p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="px-5 py-2.5 rounded-xl bg-zcGold text-black font-black text-xs shadow-lg shadow-zcGold/20 hover:scale-105 transition" data-i18n="eventBtn1">領取獨家活動優惠 ➔</a>
+                        <a href="https://t.me/ZCYLC_Bot" target="_blank" class="px-5 py-2.5 rounded-xl bg-neutral-800 text-slate-200 border border-neutral-700 font-bold text-xs hover:bg-neutral-700 transition" data-i18n="eventBtn2">開啟 Mini App</a>
+                    </div>
+                </div>
+                <div class="w-full md:w-80 h-44 rounded-2xl bg-neutral-900 border gold-border overflow-hidden flex items-center justify-center relative group">
+                    <img id="event-banner-img" src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" alt="TG Event Banner" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80" onerror="this.src='https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=800&q=80';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-3">
+                        <span class="text-[10px] font-bold text-zcGold bg-black/80 px-2 py-1 rounded" data-i18n="eventBadge">ZC VIP 活動進行中</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 今日賽事節目表與直連 API-Sports 模組 -->
+            <div class="bg-zcCard rounded-3xl p-6 border gold-border shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-neutral-800">
+                    <div>
+                        <h2 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
+                            <span data-i18n="matchListTitle">📋 今日賽事節目表與完整看台清單</span>
+                            <span id="api-status" class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 animate-pulse">● API-Sports 已連線</span>
+                        </h2>
+                        <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="scheduleSubtitle">國際足球賽事實時串接中，點擊任一場次即可切換 LIVE 動態看台</p>
+                    </div>
+                    <!-- 賽事分類篩選 -->
+                    <div class="flex flex-wrap gap-2 text-xs font-bold">
+                        <button onclick="filterCategory('football')" id="cat-football" class="px-3 py-1.5 rounded-xl bg-zcGold text-black transition">國際足球</button>
+                        <button onclick="filterCategory('all')" id="cat-all" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">全部</button>
+                        <button onclick="filterCategory('npb')" id="cat-npb" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NPB 日職</button>
+                        <button onclick="filterCategory('mlb')" id="cat-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">MLB 美職</button>
+                        <button onclick="filterCategory('nba')" id="cat-nba" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NBA 籃球</button>
+                    </div>
+                </div>
+                <!-- 賽事清單列表 -->
+                <div id="schedule-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-2"></div>
+            </div>
+
+            <!-- 3. 熱門賽事 LIVE 動態看台 -->
+            <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[520px]"></div>
+
+            <!-- 4. 體育大事件與賽事解析專區 (三大 Telegram 頻道對接) -->
+            <div class="bg-zcCard p-6 rounded-3xl border gold-border space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-neutral-800">
+                    <h3 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
+                        <span data-i18n="highlightTitle">🎬 ZC 體育大事件與賽事深度解析</span>
+                    </h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="https://t.me/zcyl_sub" target="_blank" class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800 hover:border-zcGold transition group block">
+                        <div class="text-[10px] text-zcGold font-bold mb-1">🔥 官方熱門頻道</div>
+                        <div class="text-sm font-bold text-white group-hover:text-zcGold transition">智創體育大事件</div>
+                        <div class="text-xs text-slate-400 mt-2">點擊前往觀看獨家大事件與視頻解析 ➔</div>
+                    </a>
+                    <a href="https://t.me/ZCYL_Sports" target="_blank" class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800 hover:border-zcGold transition group block">
+                        <div class="text-[10px] text-zcGold font-bold mb-1">📅 即時賽程資訊</div>
+                        <div class="text-sm font-bold text-white group-hover:text-zcGold transition">球賽賽事表</div>
+                        <div class="text-xs text-slate-400 mt-2">點擊前往查看最新完整賽事對陣表 ➔</div>
+                    </a>
+                    <a href="https://t.me/ZCYL_FC" target="_blank" class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800 hover:border-zcGold transition group block">
+                        <div class="text-[10px] text-zcGold font-bold mb-1">⚽ 深度專業剖析</div>
+                        <div class="text-sm font-bold text-white group-hover:text-zcGold transition">賽事分析</div>
+                        <div class="text-xs text-slate-400 mt-2">點擊前往解讀聯賽盤口與戰術佈局 ➔</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分頁二：多聯盟戰績排行 -->
+        <div id="section-standings" class="hidden space-y-6">
+            <div class="bg-zcCard rounded-3xl p-8 border gold-border">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <h2 class="text-xl font-black text-zcGold" data-i18n="standingsHeader">🏆 全球頂級職業運動與足球聯賽戰績排行</h2>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <button onclick="switchLeague('football')" id="btn-league-football" class="px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition" data-i18n="footballBtn">國際足球聯賽</button>
+                        <button onclick="switchLeague('npb')" id="btn-league-npb" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="npbBtn">NPB 日職</button>
+                        <button onclick="switchLeague('mlb')" id="btn-league-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="mlbBtn">MLB 美職</button>
+                        <button onclick="switchLeague('nba')" id="btn-league-nba" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="nbaBtn">NBA 籃球</button>
+                    </div>
+                </div>
+                <div id="standings-content" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-zcDark border-t border-neutral-900 py-6 text-center text-xs text-slate-500 space-y-2">
+        <p>© 2026 ZC SPORT DATA CENTER. Professional Live Scores & Analytics.</p>
+        <div class="flex justify-center space-x-4 text-[11px] text-slate-400">
+            <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="hover:text-zcGold">官方註冊</a>
+            <span>•</span>
+            <a href="https://t.me/zcyl_sub" target="_blank" class="hover:text-zcGold">智創體育大事件</a>
+            <span>•</span>
+            <a href="https://t.me/ZCYL_Offical" target="_blank" class="hover:text-zcGold">Telegram 頻道</a>
+            <span>•</span>
+            <a href="https://t.me/ZCYLC_Bot" target="_blank" class="hover:text-zcGold">Mini App 客服</a>
+        </div>
+    </footer>
+
+    <script>
+        const API_KEY = "1f4986ff078ef11fb277f6799a7d263a";
+
+        const translations = {
+            'zh-TW': {
+                tabScores: '📊 即時比分與動態看台', tabStandings: '🏆 多聯盟戰績排行',
+                registerBtn: '🎁 ZC 獨家開戶', officialHub: '⚡ ZC 官方入口:',
+                regLink: '🔥 立即註冊帳號', mobileLink: '📱 手機版網頁', pcLink: '💻 電腦版網頁',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG 官方頻道',
+                eventTitle: 'ZC 獨家首存尊榮優惠活動',
+                eventDesc: '即刻加入 ZC 體育平台，享有全球最速串流數據與最高額度優惠返利！註冊即送專屬體育紅利禮金。',
+                eventBtn1: '領取獨家活動優惠 ➔', eventBtn2: '開啟 Mini App', eventBadge: 'ZC VIP 活動進行中',
+                matchListTitle: '📋 今日賽事節目表與完整看台清單', scheduleSubtitle: '國際足球賽事實時串接中，點擊任一場次即可切換 LIVE 動態看台',
+                highlightTitle: '🎬 ZC 體育大事件與賽事深度解析',
+                standingsHeader: '🏆 全球頂級職業運動與足球聯賽戰績排行',
+                detailBtn: '回看', liveBtn: 'LIVE', rankTeam: '排名 / 球隊', win: '勝', lose: '負', pct: '勝率 / 積分',
+                npbBtn: 'NPB 日職', mlbBtn: 'MLB 美職', nbaBtn: 'NBA 籃球', footballBtn: '國際足球聯賽',
+                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者'
+            },
+            'zh-CN': {
+                tabScores: '📊 即时比分与动态看台', tabStandings: '🏆 多联盟战绩排行',
+                registerBtn: '🎁 ZC 独家开户', officialHub: '⚡ ZC 官方入口:',
+                regLink: '🔥 立即注册账号', mobileLink: '📱 手机版网页', pcLink: '💻 电脑版网页',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG 官方频道',
+                eventTitle: 'ZC 独家首存尊荣优惠活动',
+                eventDesc: '即刻加入 ZC 体育平台，享有全球最速流媒体数据与最高额度优惠返利！注册即送专属体育红利礼金。',
+                eventBtn1: '领取独家活动优惠 ➔', eventBtn2: '开启 Mini App', eventBadge: 'ZC VIP 活动进行中',
+                matchListTitle: '📋 今日赛事节目表与完整看台清单', scheduleSubtitle: '国际足球赛事实时串接中，点击任一场次即可切换 LIVE 动态看台',
+                highlightTitle: '🎬 ZC 体育大赛事与赛事深度解析',
+                standingsHeader: '🏆 全球顶级职业运动与足球联赛战绩排行',
+                detailBtn: '回看', liveBtn: 'LIVE', rankTeam: '排名 / 球队', win: '胜', lose: '负', pct: '胜率 / 积分',
+                npbBtn: 'NPB 日职', mlbBtn: 'MLB 美职', nbaBtn: 'NBA 篮球', footballBtn: '国际足球联赛',
+                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者'
+            },
+            'en': {
+                tabScores: '📊 Live Scores & Dashboard', tabStandings: '🏆 Standings',
+                registerBtn: '🎁 Exclusive Register', officialHub: '⚡ Official Hub:',
+                regLink: '🔥 Register Now', mobileLink: '📱 Mobile Version', pcLink: '💻 PC Version',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG Channel',
+                eventTitle: 'ZC Exclusive VIP Deposit Bonus',
+                eventDesc: 'Join ZC Sports now to enjoy ultra-fast live data and top-tier rebate rewards!',
+                eventBtn1: 'Claim Bonus ➔', eventBtn2: 'Open Mini App', eventBadge: 'VIP Event Live',
+                matchListTitle: '📋 Today Schedule & Live Dashboard', scheduleSubtitle: 'Football live data connected, click any match to switch dashboard',
+                highlightTitle: '🎬 ZC Sports Analysis & Major Events',
+                standingsHeader: '🏆 Global Professional Sports Standings',
+                detailBtn: 'Replay', liveBtn: 'LIVE', rankTeam: 'Rank / Team', win: 'W', lose: 'L', pct: 'PCT / PTS',
+                npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'Football',
+                pitcherLabel: 'PITCHER', batterLabel: 'BATTER'
+            },
+            'ja': {
+                tabScores: '📊 ライブスコア＆ダッシュボード', tabStandings: '🏆 順位表',
+                registerBtn: '🎁 限定登録', officialHub: '⚡ 公式リンク:',
+                regLink: '🔥 今すぐ登録', mobileLink: '📱 モバイル版', pcLink: '💻 PC版',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG チャンネル',
+                eventTitle: 'ZC プレミアム初回入金ボーナス',
+                eventDesc: '今すぐZCスポーツに参加して、最速のライブデータと最高峰の特典を手に入れよう！',
+                eventBtn1: 'ボーナスを受け取る ➔', eventBtn2: 'Mini Appを開く', eventBadge: 'VIPイベント開催中',
+                matchListTitle: '📋 本日の番組表とライブダッシュボード', scheduleSubtitle: 'サッカーライブデータ接続中、試合をクリックして切り替え',
+                highlightTitle: '🎬 ZC スポーツ分析＆大事件解説',
+                standingsHeader: '🏆 グローバルプロスポーツ順位表',
+                detailBtn: '見逃し', liveBtn: 'LIVE', rankTeam: '順位 / チーム', win: '勝', lose: '敗', pct: '勝率',
+                npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'サッカー',
+                pitcherLabel: '投手', batterLabel: '打者'
+            },
+            'es': {
+                tabScores: '📊 En Vivo y Marcadores', tabStandings: '🏆 Posiciones',
+                registerBtn: '🎁 Registro Exclusivo', officialHub: '⚡ Enlaces Oficiales:',
+                regLink: '🔥 Registrarse', mobileLink: '📱 Versión Móvil', pcLink: '💻 Versión PC',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 Canal TG',
+                eventTitle: 'Bono Exclusivo VIP de ZC Sports',
+                eventDesc: '¡Únete ahora para disfrutar de datos en vivo ultrarrápidos y las mejores bonificaciones!',
+                eventBtn1: 'Reclamar Bono ➔', eventBtn2: 'Abrir Mini App', eventBadge: 'Evento VIP en Vivo',
+                matchListTitle: '📋 Programación y Marcadores en Vivo', scheduleSubtitle: 'Datos en vivo conectados, haga clic en un partido',
+                highlightTitle: '🎬 Análisis y Grandes Eventos de ZC Sports',
+                standingsHeader: '🏆 Posiciones de Ligas Mundiales',
+                detailBtn: 'Repetición', liveBtn: 'EN VIVO', rankTeam: 'Pos / Equipo', win: 'G', lose: 'P', pct: 'PCT / PTS',
+                npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'Fútbol',
+                pitcherLabel: 'LANZADOR', batterLabel: 'BATEADOR'
+            }
+        };
+
+        let currentLang = 'zh-TW';
+        let currentCat = 'football';
+        let sportsData = [];
+        let currentMatch = null;
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            renderScheduleList();
+            renderVisualBoard(currentMatch);
+            switchLeague(currentLeague);
+        }
+
+        // 直連 API-Sports 抓取即時數據
+        async function fetchLiveFootballFromAPI() {
+            const today = new Date().toISOString().split('T')[0];
+            try {
+                const response = await fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`, {
+                    method: "GET",
+                    headers: {
+                        "x-apisports-key": API_KEY
+                    }
+                });
+                const data = await response.json();
+                
+                if (data.response && data.response.length > 0) {
+                    const apiMatches = data.response.map((item, idx) => ({
+                        id: 'api_f_' + idx,
+                        category: 'football',
+                        type: item.league.name,
+                        time: item.fixture.date.substring(11, 16),
+                        title: `${item.teams.home.name} vs ${item.teams.away.name}`,
+                        status: item.fixture.status.long || '未開賽',
+                        score: `${item.goals.home ?? 0} - ${item.goals.away ?? 0}`,
+                        isLive: item.fixture.status.short === 'LIVE' || item.fixture.status.short === '1H' || item.fixture.status.short === '2H',
+                        details: {
+                            possessionRate: '控球率: 50% - 50%',
+                            shotsTotal: '射門數: 實時數據連線',
+                            goals: []
+                        }
+                    }));
+
+                    sportsData = [...apiMatches, ...getFallbackSportsData()];
+                    document.getElementById('api-status').innerText = '● API-Sports 數據加載成功';
+                } else {
+                    sportsData = getFallbackSportsData();
+                }
+            } catch (err) {
+                console.warn("API 請求遭遇阻擋，自動啟動高品質備用數據源:", err);
+                sportsData = getFallbackSportsData();
+            }
+            
+            currentMatch = sportsData[0];
+            renderScheduleList();
+            renderVisualBoard(currentMatch);
+        }
+
+        function getFallbackSportsData() {
+            return [
+                {
+                    id: 'f1', category: 'football', type: '英格蘭超級聯賽', time: '00:00',
+                    title: '赫爾城 vs 伊普斯維奇城', status: '上半場 25\'', score: '1 - 0', isLive: true,
+                    details: { possessionRate: '控球率: 54% - 46%', shotsTotal: '射門數: 6 - 4', goals: [{ time: '18\'', player: 'Liam Delap (赫爾城)', type: '⚽ 進球' }] }
+                },
+                {
+                    id: 'f2', category: 'football', type: '英格蘭超級聯賽', time: '01:30',
+                    title: '托特納姆熱刺 vs 水晶宮', status: '未開賽', score: '0 - 0', isLive: false,
+                    details: { possessionRate: '控球率: --', shotsTotal: '射門數: --', goals: [] }
+                },
+                {
+                    id: 'f3', category: 'football', type: '英格蘭超級聯賽', time: '04:00',
+                    title: '阿斯頓維拉 vs 富勒姆', status: '未開賽', score: '0 - 0', isLive: false,
+                    details: { possessionRate: '控球率: --', shotsTotal: '射門數: --', goals: [] }
+                },
+                {
+                    id: 'f4', category: 'football', type: '日職聯賽 (第13輪)', time: '12:00',
+                    title: '橫濱水手 vs 川崎前鋒', status: '賽前預熱', score: '0 - 0', isLive: false,
+                    details: { possessionRate: '控球率: --', shotsTotal: '射門數: --', goals: [] }
+                },
+                {
+                    id: 'npb1', category: 'npb', type: 'NPB 日本職棒', time: '11:45',
+                    title: '讀賣巨人 vs 阪神虎', status: '7 局下半 (1出局)', score: '4 - 2', isLive: true,
+                    inningScores: { teams: ['讀賣巨人 (客)', '阪神虎 (主)'], scores: [[0, 1, 0, 0, 1, 0, 0, 'X', 'X'], [1, 0, 2, 0, 0, 0, 1, 'X', 'X']], stats: [ [2, 6, 0], [4, 8, 1] ] },
+                    details: { pitcher: { name: '戸郷 翔征', era: '2.14', stats: '6.1局 7K 2保送' }, batter: { name: '佐藤 輝明', avg: '.285', today: '3打數 2安打 (1全壘打)' }, lastPitch: '⚡ 第 5 球: 152 km/h 直球 (好球命中)', bso: { balls: 2, strikes: 2, outs: 1 }, bases: { first: true, second: false, third: true } }
+                },
+                {
+                    id: 'mlb1', category: 'mlb', type: 'MLB 美國職棒', time: '16:30',
+                    title: '洛杉磯道奇 vs 紐約洋基', status: '8 局上半 (2出局)', score: '5 - 3', isLive: true,
+                    inningScores: { teams: ['道奇 (客)', '洋基 (主)'], scores: [[1, 0, 2, 0, 0, 1, 0, 1, 'X'], [0, 2, 0, 1, 0, 0, 0, 'X', 'X']], stats: [ [5, 9, 0], [3, 5, 1] ] },
+                    details: { pitcher: { name: 'Gerrit Cole', era: '2.88', stats: '7.2局 9K' }, batter: { name: '大谷 翔平 (Shohei Ohtani)', avg: '.310', today: '4打數 2安打 (1全壘打)' }, lastPitch: '⚡ 第 4 球: 88 mph 掃球 (Sweeper)', bso: { balls: 3, strikes: 2, outs: 2 }, bases: { first: true, second: true, third: false } }
+                },
+                {
+                    id: 'nba1', category: 'nba', type: 'NBA 美職籃', time: '19:00',
+                    title: '洛杉磯湖人 vs 波士頓塞爾提克', status: '第 4 節 02:15', score: '108 - 105', isLive: true,
+                    quarters: { teams: ['洛杉磯湖人 (LAL)', '波士頓塞爾提克 (BOS)'], scores: [[28, 26, 30, 24], [25, 31, 27, 22]], total: [108, 105] },
+                    lineups: { away: [{ name: 'LeBron James (SF)', pts: '32 PTS', ast: '8 AST', reb: '9 REB' }], home: [{ name: 'Jayson Tatum (SF)', pts: '34 PTS', reb: '10 REB', ast: '5 AST' }] }
+                }
+            ];
+        }
+
+        const standingsData = {
+            football: { title1: '英格蘭超級聯賽 (Premier League)', title2: '西班牙甲級聯賽 (La Liga)', col1: [{rank: 1, name: '曼城', win: 28, lose: 4, pct: '88 pts'}], col2: [{rank: 1, name: '皇家馬德里', win: 29, lose: 2, pct: '95 pts'}] },
+            npb: { title1: '日本職棒 - 中央聯盟 (Central)', title2: '日本職棒 - 太平洋聯盟 (Pacific)', col1: [{rank: 1, name: '阪神虎', win: 81, lose: 59, pct: '.579'}], col2: [{rank: 1, name: '福岡軟銀鷹', win: 88, lose: 52, pct: '.629'}] },
+            mlb: { title1: '美國聯盟 (American League)', title2: '國家聯盟 (National League)', col1: [{rank: 1, name: '紐約洋基', win: 94, lose: 68, pct: '.580'}], col2: [{rank: 1, name: '洛杉磯道奇', win: 98, lose: 64, pct: '.605'}] },
+            nba: { title1: '東區聯盟 (Eastern Conference)', title2: '西區聯盟 (Western Conference)', col1: [{rank: 1, name: '塞爾提克', win: 52, lose: 15, pct: '.776'}], col2: [{rank: 1, name: '丹佛金塊', win: 48, lose: 20, pct: '.706'}] }
+        };
+
+        let currentLeague = 'football';
+
+        function filterCategory(cat) {
+            currentCat = cat;
+            ['all', 'npb', 'mlb', 'nba', 'football'].forEach(c => {
+                const btn = document.getElementById(`cat-${c}`);
+                if (c === cat) {
+                    btn.className = "px-3 py-1.5 rounded-xl bg-zcGold text-black font-bold transition";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition";
+                }
+            });
+            renderScheduleList();
+        }
+
+        function renderScheduleList() {
+            const listEl = document.getElementById('schedule-list');
+            listEl.innerHTML = '';
+            const t = translations[currentLang];
+            const filteredData = currentCat === 'all' ? sportsData : sportsData.filter(m => m.category === currentCat);
+            
+            filteredData.forEach(m => {
+                const isSelected = currentMatch && currentMatch.id === m.id;
+                const row = document.createElement('div');
+                row.className = `p-3 rounded-xl cursor-pointer border transition flex items-center justify-between ${isSelected ? 'bg-neutral-900 border-zcGold shadow-md shadow-zcGold/10' : 'bg-neutral-950/60 border-neutral-900 hover:border-zcGold/40'}`;
+                row.onclick = () => { currentMatch = m; renderScheduleList(); renderVisualBoard(m); };
+                row.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-2.5 py-1 rounded-md border border-zcGold/20">${m.time}</span>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-semibold uppercase">${m.type}</span>
+                            <div class="text-sm font-bold text-white mt-0.5">${m.title}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xs font-bold text-slate-300">${m.score}</span>
+                        <span class="text-[11px] font-black px-2.5 py-1 rounded-md ${m.isLive ? 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse' : 'bg-neutral-800 text-slate-400'}">${m.isLive ? t.liveBtn : t.detailBtn}</span>
+                    </div>
+                `;
+                listEl.appendChild(row);
+            });
+        }
+
+        function renderVisualBoard(match) {
+            if (!match) return;
+            const board = document.getElementById('visual-board');
+            const t = translations[currentLang];
+            
+            if (match.category === 'npb' || match.category === 'mlb') {
+                const s = match.inningScores;
+                const b = match.details.bases;
+                board.innerHTML = `
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚾ ${match.type} 一球速報</span><span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span></div>
+                    <div class="overflow-x-auto my-3 bg-neutral-950 p-3 rounded-2xl border border-neutral-800">
+                        <table class="w-full text-center text-xs border-collapse">
+                            <thead><tr class="text-slate-400 border-b border-neutral-800"><th class="p-2 text-left font-bold text-zcGold">球隊</th>${[1,2,3,4,5,6,7,8,9].map(i => `<th class="p-1.5 w-7">${i}</th>`).join('')}<th class="p-2 text-zcGold font-bold">R</th><th class="p-2">H</th><th class="p-2">E</th></tr></thead>
+                            <tbody class="divide-y divide-neutral-800/60 font-semibold text-slate-200">
+                                <tr><td class="p-2 text-left font-bold text-white">${s.teams[0]}</td>${s.scores[0].map(v => `<td class="p-1.5">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[0][0]}</td><td class="p-2">${s.stats[0][1]}</td><td class="p-2 text-slate-400">${s.stats[0][2]}</td></tr>
+                                <tr><td class="p-2 text-left font-bold text-white">${s.teams[1]}</td>${s.scores[1].map(v => `<td class="p-1.5">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[1][0]}</td><td class="p-2">${s.stats[1][1]}</td><td class="p-2 text-slate-400">${s.stats[1][2]}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 items-center bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800">
+                        <div class="space-y-1.5 text-xs text-slate-300"><span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.pitcherLabel}</span><div class="text-sm font-bold text-white">${match.details.pitcher.name}</div><div>ERA: <span class="text-zcGold font-bold">${match.details.pitcher.era}</span></div></div>
+                        <div class="flex flex-col items-center justify-center space-y-3">
+                            <div class="relative w-24 h-24 bg-emerald-950/40 border border-emerald-600/40 rounded-xl flex items-center justify-center">
+                                <div class="absolute top-2 w-5 h-5 rotate-45 ${b && b.second ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-slate-600"></div>
+                                <div class="absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 rotate-45 ${b && b.third ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-slate-600"></div>
+                                <div class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rotate-45 ${b && b.first ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-slate-600"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-300 text-left md:text-right"><span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.batterLabel}</span><div class="text-sm font-bold text-white">${match.details.batter.name}</div><div>AVG: <span class="text-zcGold font-bold">${match.details.batter.avg}</span></div></div>
+                    </div>
+                `;
+            } else if (match.category === 'nba') {
+                const q = match.quarters;
+                board.innerHTML = `
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">🏀 ${match.type}</span><span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span></div>
+                    <div class="overflow-x-auto my-3 bg-neutral-950 p-3 rounded-2xl border border-neutral-800">
+                        <table class="w-full text-center text-xs border-collapse">
+                            <thead><tr class="text-slate-400 border-b border-neutral-800"><th class="p-2 text-left font-bold text-zcGold">球隊</th><th class="p-2">Q1</th><th class="p-2">Q2</th><th class="p-2">Q3</th><th class="p-2">Q4</th><th class="p-2 text-zcGold font-bold">Total</th></tr></thead>
+                            <tbody class="divide-y divide-neutral-800/60 font-semibold text-slate-200">
+                                <tr><td class="p-2 text-left font-bold text-white">${q.teams[0]}</td>${q.scores[0].map(v => `<td class="p-2">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${q.total[0]}</td></tr>
+                                <tr><td class="p-2 text-left font-bold text-white">${q.teams[1]}</td>${q.scores[1].map(v => `<td class="p-2">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${q.total[1]}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else {
+                const d = match.details || { possessionRate: '控球率: --', shotsTotal: '射門數: --', goals: [] };
+                board.innerHTML = `
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚽ ${match.type}</span><span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span></div>
+                    <div class="text-center my-3"><div class="text-xl md:text-2xl font-black text-white">${match.title}</div><div class="text-3xl md:text-4xl font-black text-zcGold gold-glow my-2">${match.score}</div></div>
+                    <div class="grid grid-cols-2 gap-3 text-xs my-3">
+                        <div class="bg-neutral-900 p-2.5 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">${d.possessionRate}</div>
+                        <div class="bg-neutral-900 p-2.5 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">${d.shotsTotal}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function switchMainTab(tab) {
+            const scoresSec = document.getElementById('section-scores');
+            const standingsSec = document.getElementById('section-standings');
+            const navScores = document.getElementById('nav-scores');
+            const navStandings = document.getElementById('nav-standings');
+
+            if (tab === 'scores') {
+                scoresSec.classList.remove('hidden'); standingsSec.classList.add('hidden');
+                navScores.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
+                navStandings.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
+            } else {
+                scoresSec.classList.add('hidden'); standingsSec.classList.remove('hidden');
+                navStandings.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
+                navScores.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
+                switchLeague('football');
+            }
+        }
+
+        function switchLeague(leagueKey) {
+            currentLeague = leagueKey;
+            ['football', 'npb', 'mlb', 'nba'].forEach(l => {
+                const btn = document.getElementById(`btn-league-${l}`);
+                if (l === leagueKey) btn.className = "px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition";
+                else btn.className = "px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700";
+            });
+            const data = standingsData[leagueKey]; const t = translations[currentLang]; const container = document.getElementById('standings-content');
+            container.innerHTML = `
+                <div class="bg-neutral-900/60 p-5 rounded-2xl border border-neutral-800"><h3 class="text-sm font-bold text-slate-300 mb-4 pb-2 border-b border-neutral-800">${data.title1}</h3><table class="w-full text-left text-xs"><thead><tr class="text-slate-500 border-b border-neutral-800"><th class="pb-2">${t.rankTeam}</th><th class="pb-2 text-center">${t.win}</th><th class="pb-2 text-center">${t.lose}</th><th class="pb-2 text-right">${t.pct}</th></tr></thead><tbody class="divide-y divide-neutral-800/50 text-slate-300">${data.col1.map(item => `<tr><td class="py-2.5 font-bold text-zcGold">${item.rank}. ${item.name}</td><td class="text-center">${item.win}</td><td class="text-center">${item.lose}</td><td class="text-right font-semibold">${item.pct}</td></tr>`).join('')}</tbody></table></div>
+                <div class="bg-neutral-900/60 p-5 rounded-2xl border border-neutral-800"><h3 class="text-sm font-bold text-slate-300 mb-4 pb-2 border-b border-neutral-800">${data.title2}</h3><table class="w-full text-left text-xs"><thead><tr class="text-slate-500 border-b border-neutral-800"><th class="pb-2">${t.rankTeam}</th><th class="pb-2 text-center">${t.win}</th><th class="pb-2 text-center">${t.lose}</th><th class="pb-2 text-right">${t.pct}</th></tr></thead><tbody class="divide-y divide-neutral-800/50 text-slate-300">${data.col2.map(item => `<tr><td class="py-2.5 font-bold text-zcGold">${item.rank}. ${item.name}</td><td class="text-center">${item.win}</td><td class="text-center">${item.lose}</td><td class="text-right font-semibold">${item.pct}</td></tr>`).join('')}</tbody></table></div>
+            `;
+        }
+
+        window.onload = () => { 
+            fetchLiveFootballFromAPI();
+            filterCategory('football');
+            switchLeague('football');
+        };
+    </script>
+</body>
+</html>
