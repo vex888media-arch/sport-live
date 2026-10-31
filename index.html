@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <!-- 手機版專屬導航按鈕列 (解決手機無法選擇多聯盟與戰績的問題) -->
+        <!-- 手機版專屬導航按鈕列 -->
         <div class="lg:hidden flex border-t border-neutral-900 bg-neutral-950 p-2 gap-2 text-xs font-bold">
             <button onclick="switchMainTab('scores')" id="m-nav-scores" class="flex-1 py-2 rounded-lg bg-zcGold text-black text-center transition" data-i18n="tabScores">📊 即時比分</button>
             <button onclick="switchMainTab('standings')" id="m-nav-standings" class="flex-1 py-2 rounded-lg bg-neutral-900 text-slate-300 text-center transition border border-neutral-800" data-i18n="tabStandings">🏆 多聯盟戰績</button>
@@ -101,14 +101,14 @@
                     <div>
                         <h2 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
                             <span data-i18n="matchListTitle">📋 今日賽事節目表與完整看台清單</span>
-                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 animate-pulse" data-i18n="syncActive">● 賽事實時計時與戰情同步中</span>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 animate-pulse" data-i18n="syncActive">● API 實況計時同步中</span>
                         </h2>
-                        <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="scheduleSubtitle">具備倒數計時與比賽進行時間顯示，點擊任一場次查看詳細看台數據</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="scheduleSubtitle">即時比分與計時器零時差連動，點擊任一場次查看詳細動態看台</p>
                     </div>
-                    <!-- 賽事分類篩選 -->
+                    <!-- 賽事分類篩選 (已將「今日精選賽事」移至最前方) -->
                     <div class="flex flex-wrap gap-2 text-xs font-bold">
-                        <button onclick="filterCategory('football')" id="cat-football" class="px-3 py-1.5 rounded-xl bg-zcGold text-black transition" data-i18n="catFootball">國際足球</button>
-                        <button onclick="filterCategory('all')" id="cat-all" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="catAll">全部</button>
+                        <button onclick="filterCategory('featured')" id="cat-featured" class="px-3 py-1.5 rounded-xl bg-zcGold text-black transition" data-i18n="catFeatured">🌟 今日精選賽事</button>
+                        <button onclick="filterCategory('football')" id="cat-football" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="catFootball">國際足球</button>
                         <button onclick="filterCategory('npb')" id="cat-npb" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="catNpb">NPB 日職</button>
                         <button onclick="filterCategory('mlb')" id="cat-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="catMlb">MLB 美職</button>
                         <button onclick="filterCategory('nba')" id="cat-nba" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition" data-i18n="catNba">NBA 籃球</button>
@@ -183,7 +183,7 @@
     </footer>
 
     <script>
-        // 5國多語系介面字典 (含全中文化數據標籤)
+        // 5國多語系介面字典
         const translations = {
             'zh-TW': {
                 tabScores: '📊 即時比分與動態看台', tabStandings: '🏆 多聯盟戰績列表與完賽賽績',
@@ -193,9 +193,9 @@
                 eventTitle: 'ZC 獨家首存尊榮優惠活動',
                 eventDesc: '即刻加入 ZC 體育平台，享有最精準的賽事數據與最高額度優惠返利！註冊即送專屬體育紅利禮金。',
                 eventBtn1: '領取獨家活動優惠 ➔', eventBtn2: '開啟 Mini App', eventBadge: 'ZC VIP 活動進行中',
-                matchListTitle: '📋 今日賽事節目表與完整看台清單', syncActive: '● 賽事實時計時與戰情同步中',
-                scheduleSubtitle: '具備倒數計時與比賽進行時間顯示，點擊任一場次查看詳細看台數據',
-                catFootball: '國際足球', catAll: '全部', catNpb: 'NPB 日職', catMlb: 'MLB 美職', catNba: 'NBA 籃球',
+                matchListTitle: '📋 今日賽事節目表與完整看台清單', syncActive: '● API 實況計時同步中',
+                scheduleSubtitle: '即時比分與計時器零時差連動，點擊任一場次查看詳細動態看台',
+                catFeatured: '🌟 今日精選賽事', catFootball: '國際足球', catNpb: 'NPB 日職', catMlb: 'MLB 美職', catNba: 'NBA 籃球',
                 highlightTitle: '🎬 ZC 體育大事件與賽事深度解析',
                 ch1Tag: '🔥 官方熱門頻道', ch1Name: '智創體育大事件',
                 ch2Tag: '📅 即時賽程資訊', ch2Name: '球賽賽事表',
@@ -220,9 +220,9 @@
                 eventTitle: 'ZC 独家首存尊荣优惠活动',
                 eventDesc: '即刻加入 ZC 体育平台，享有最精准的赛事数据与最高额度优惠返利！注册即送专属体育红利礼金。',
                 eventBtn1: '领取独家活动优惠 ➔', eventBtn2: '开启 Mini App', eventBadge: 'ZC VIP 活动进行中',
-                matchListTitle: '📋 今日赛事节目表与完整看台清单', syncActive: '● 赛事实时计时与战情同步中',
-                scheduleSubtitle: '具备倒计时与比赛进行时间显示，点击任一场次查看详细看台数据',
-                catFootball: '国际足球', catAll: '全部', catNpb: 'NPB 日职', catMlb: 'MLB 美职', catNba: 'NBA 篮球',
+                matchListTitle: '📋 今日赛事节目表与完整看台清单', syncActive: '● API 实况计时同步中',
+                scheduleSubtitle: '即时比分与计时器零时差连动，点击任一场次查看详细动态看台',
+                catFeatured: '🌟 今日精选赛事', catFootball: '国际足球', catNpb: 'NPB 日职', catMlb: 'MLB 美职', catNba: 'NBA 篮球',
                 highlightTitle: '🎬 ZC 体育大赛事与赛事深度解析',
                 ch1Tag: '🔥 官方热门频道', ch1Name: '智创体育大事件',
                 ch2Tag: '📅 即时赛程信息', ch2Name: '球赛赛事表',
@@ -247,9 +247,9 @@
                 eventTitle: 'ZC VIP Deposit Bonus Event',
                 eventDesc: 'Join ZC Sports now to enjoy precise live data and top-tier rebate rewards!',
                 eventBtn1: 'Claim Bonus ➔', eventBtn2: 'Open Mini App', eventBadge: 'VIP Event Live',
-                matchListTitle: '📋 Schedule & Live Dashboard', syncActive: '● Live Countdown Active',
-                scheduleSubtitle: 'Real-time countdown and match timer included',
-                catFootball: 'Football', catAll: 'All', catNpb: 'NPB', catMlb: 'MLB', catNba: 'NBA',
+                matchListTitle: '📋 Schedule & Live Dashboard', syncActive: '● API Live Timer Active',
+                scheduleSubtitle: 'Real-time live scores and synced timers',
+                catFeatured: '🌟 Featured Events', catFootball: 'Football', catNpb: 'NPB', catMlb: 'MLB', catNba: 'NBA',
                 highlightTitle: '🎬 ZC Sports Analysis & Events',
                 ch1Tag: '🔥 Hot Channel', ch1Name: 'ZC Sports Events',
                 ch2Tag: '📅 Schedule', ch2Name: 'Match Schedule',
@@ -274,9 +274,9 @@
                 eventTitle: 'ZC プレミアム初回入金ボーナス',
                 eventDesc: '今すぐZCスポーツに参加して、正確なライブデータと特典を手に入れよう！',
                 eventBtn1: 'ボーナスを受け取る ➔', eventBtn2: 'Mini Appを開く', eventBadge: 'VIPイベント開催中',
-                matchListTitle: '📋 本日の番組表とライブダッシュボード', syncActive: '● カウントダウン稼働中',
-                scheduleSubtitle: 'リアルタイムのカウントダウンと試合進行時間を表示',
-                catFootball: 'サッカー', catAll: 'すべて', catNpb: 'NPB', catMlb: 'MLB', catNba: 'NBA',
+                matchListTitle: '📋 本日の番組表とライブダッシュボード', syncActive: '● APIライブタイマー稼働中',
+                scheduleSubtitle: 'リアルタイムのスコアとタイマーが同期',
+                catFeatured: '🌟 注目の厳選試合', catFootball: 'サッカー', catNpb: 'NPB', catMlb: 'MLB', catNba: 'NBA',
                 highlightTitle: '🎬 ZC スポーツ分析＆解説',
                 ch1Tag: '🔥 公式チャンネル', ch1Name: 'ZCスポーツ事件簿',
                 ch2Tag: '📅 試合日程', ch2Name: '対戦カード一覧',
@@ -301,9 +301,9 @@
                 eventTitle: 'Bono Exclusivo VIP de ZC Sports',
                 eventDesc: '¡Únete para disfrutar de datos precisos y las mejores bonificaciones!',
                 eventBtn1: 'Reclamar Bono ➔', eventBtn2: 'Abrir Mini App', eventBadge: 'Evento VIP en Vivo',
-                matchListTitle: '📋 Programación y Marcadores en Vivo', syncActive: '● Temporizador Activo',
-                scheduleSubtitle: 'Incluye cuenta regresiva en vivo y tiempo de juego',
-                catFootball: 'Fútbol', catAll: 'Todo', catNpb: 'NPB', catMlb: 'MLB', catNba: 'NBA',
+                matchListTitle: '📋 Programación y Marcadores en Vivo', syncActive: '● Temporizador API Activo',
+                scheduleSubtitle: 'Marcadores en vivo y temporizadores sincronizados',
+                catFeatured: '🌟 Destacados', catFootball: 'Fútbol', catNpb: 'NPB', catMlb: 'MLB', catNba: 'NBA',
                 highlightTitle: '🎬 Análisis y Eventos ZC Sports',
                 ch1Tag: '🔥 Canal Oficial', ch1Name: 'Eventos ZC',
                 ch2Tag: '📅 Calendario', ch2Name: 'Horarios',
@@ -324,11 +324,18 @@
 
         // 球隊與聯賽 5 國語言翻譯字典
         const teamDict = {
+            "FIFA World Cup": { "zh-TW": "世界盃足球賽 (FIFA)", "zh-CN": "世界杯足球赛 (FIFA)", "en": "FIFA World Cup", "ja": "FIFAワールドカップ", "es": "Copa Mundial de la FIFA" },
+            "Olympic Games": { "zh-TW": "奧林匹克運動會 (Olympic)", "zh-CN": "奥林匹克运动会 (Olympic)", "en": "Olympic Games", "ja": "オリンピック競技大会", "es": "Juegos Olímpicos" },
+            "Asian Games": { "zh-TW": "亞洲運動會 (Asian Games)", "zh-CN": "亚洲运动会 (Asian Games)", "en": "Asian Games", "ja": "アジア競技大会", "es": "Juegos Asiáticos" },
             "Premier League": { "zh-TW": "英格蘭超級聯賽", "zh-CN": "英格兰超级联赛", "en": "Premier League", "ja": "プレミアリーグ", "es": "Premier League" },
             "J1 League": { "zh-TW": "日本職業足球聯賽 (J1)", "zh-CN": "日本职业足球联赛 (J1)", "en": "J1 League", "ja": "J1リーグ", "es": "Liga J1" },
             "NPB": { "zh-TW": "日本職棒 (NPB)", "zh-CN": "日本职棒 (NPB)", "en": "NPB Baseball", "ja": "日本プロ野球 (NPB)", "es": "Béisbol NPB" },
             "MLB": { "zh-TW": "美國職棒大聯盟 (MLB)", "zh-CN": "美国职棒大联盟 (MLB)", "en": "MLB Baseball", "ja": "メジャーリーグ (MLB)", "es": "MLB Béisbol" },
             "NBA": { "zh-TW": "美國職籃 (NBA)", "zh-CN": "美国职篮 (NBA)", "en": "NBA Basketball", "ja": "NBAバスケ", "es": "Baloncesto NBA" },
+            "Brazil": { "zh-TW": "巴西國家足球隊", "zh-CN": "巴西国家足球队", "en": "Brazil", "ja": "ブラジル代表", "es": "Brasil" },
+            "Argentina": { "zh-TW": "阿根廷國家足球隊", "zh-CN": "阿根廷国家足球队", "en": "Argentina", "ja": "アルゼンチン代表", "es": "Argentina" },
+            "Japan Olympic Team": { "zh-TW": "日本奧運足球隊", "zh-CN": "日本奥运足球队", "en": "Japan Olympic Team", "ja": "日本代表 (五輪)", "es": "Selección Olímpica de Japón" },
+            "South Korea Olympic Team": { "zh-TW": "韓國奧運足球隊", "zh-CN": "韩国奥运足球队", "en": "South Korea Olympic Team", "ja": "韓国代表 (五輪)", "es": "Selección Olímpica de Corea del Sur" },
             "Hull City": { "zh-TW": "赫爾城", "zh-CN": "赫尔城", "en": "Hull City", "ja": "ハル・シティ", "es": "Hull City" },
             "Ipswich Town": { "zh-TW": "伊普斯維奇", "zh-CN": "伊普斯维奇", "en": "Ipswich Town", "ja": "イプスウィッチ", "es": "Ipswich Town" },
             "Tottenham Hotspur": { "zh-TW": "托特納姆熱刺", "zh-CN": "托特纳姆热刺", "en": "Tottenham Hotspur", "ja": "トッテナム", "es": "Tottenham" },
@@ -365,10 +372,9 @@
         }
 
         let currentLang = 'zh-TW';
-        let currentCat = 'football';
+        let currentCat = 'featured'; // 預設為今日精選賽事
         let sportsData = [];
         let currentMatch = null;
-        let timerSeconds = 1920; // 模擬 32 分鐘
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -411,24 +417,29 @@
 
         function initSportsData() {
             sportsData = [
+                // 優先排入世界盃、奧運等國際重大賽事 (納入「今日精選賽事」與「國際足球」)
                 {
-                    id: 'f1', category: 'football', type: 'Premier League', time: '00:00',
-                    homeTeam: 'Hull City', awayTeam: 'Ipswich Town', statusKey: 'statusLive', score: '1 - 0', isLive: true,
-                    details: { possessionRate: '54% - 46%', shotsTotal: '6 (4) - 4 (2)', goals: [{ time: '18\'', player: 'Liam Delap', type: '⚽ Goal' }] }
+                    id: 'feat1', category: 'featured', type: 'FIFA World Cup', time: 'LIVE',
+                    homeTeam: 'Brazil', awayTeam: 'Argentina', statusKey: 'statusLive', score: '2 - 1', isLive: true,
+                    timerSeconds: 4500, // 75分鐘
+                    details: { possessionRate: '52% - 48%', shotsTotal: '14 (8) - 11 (6)', goals: [{ time: '22\'', player: 'Vinicius Jr', type: '⚽ Goal' }, { time: '58\'', player: 'Lionel Messi', type: '⚽ Penalty' }] }
                 },
                 {
-                    id: 'f2', category: 'football', type: 'Premier League', time: '01:30',
-                    homeTeam: 'Tottenham Hotspur', awayTeam: 'Crystal Palace', statusKey: 'statusNotStarted', score: '0 - 0', isLive: false,
+                    id: 'feat2', category: 'featured', type: 'Olympic Games', time: '19:30',
+                    homeTeam: 'Japan Olympic Team', awayTeam: 'South Korea Olympic Team', statusKey: 'statusNotStarted', score: '0 - 0', isLive: false,
+                    timerSeconds: 0,
                     details: { possessionRate: '--', shotsTotal: '--', goals: [] }
                 },
                 {
-                    id: 'f3', category: 'football', type: 'J1 League', time: '13:00',
-                    homeTeam: 'Yokohama F. Marinos', awayTeam: 'Kawasaki Frontale', statusKey: 'statusFinished', score: '2 - 2', isLive: false,
-                    details: { possessionRate: '49% - 51%', shotsTotal: '11 - 13', goals: [{ time: '41\'', player: 'Elber', type: '⚽ Goal' }] }
+                    id: 'f1', category: 'football', type: 'Premier League', time: '00:00',
+                    homeTeam: 'Hull City', awayTeam: 'Ipswich Town', statusKey: 'statusFinished', score: '1 - 0', isLive: false,
+                    timerSeconds: 5400,
+                    details: { possessionRate: '54% - 46%', shotsTotal: '6 (4) - 4 (2)', goals: [{ time: '18\'', player: 'Liam Delap', type: '⚽ Goal' }] }
                 },
                 {
                     id: 'npb1', category: 'npb', type: 'NPB', time: '18:00',
                     homeTeam: 'Hanshin Tigers', awayTeam: 'Yomiuri Giants', statusKey: 'statusNotStarted', score: '0 - 0', isLive: false,
+                    timerSeconds: 0,
                     inningScores: {
                         teams: ['Yomiuri Giants', 'Hanshin Tigers'],
                         scores: [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]],
@@ -443,6 +454,7 @@
                 {
                     id: 'mlb1', category: 'mlb', type: 'MLB', time: '07:05',
                     homeTeam: 'New York Yankees', awayTeam: 'Los Angeles Dodgers', statusKey: 'statusFinished', score: '5 - 3', isLive: false,
+                    timerSeconds: 10800,
                     inningScores: {
                         teams: ['Los Angeles Dodgers', 'New York Yankees'],
                         scores: [[1, 0, 2, 0, 0, 1, 0, 1, 0], [0, 2, 0, 1, 0, 0, 0, 0, 0]],
@@ -454,10 +466,10 @@
                         bases: { first: false, second: false, third: false }
                     }
                 },
-                // NBA 包含全套犯規 (PF)、助攻 (AST)、抄截 (STL) 專業數據結構
                 {
                     id: 'nba1', category: 'nba', type: 'NBA', time: '10:00',
                     homeTeam: 'Boston Celtics', awayTeam: 'Los Angeles Lakers', statusKey: 'statusFinished', score: '112 - 110', isLive: false,
+                    timerSeconds: 8640,
                     quarters: {
                         teams: ['Los Angeles Lakers', 'Boston Celtics'],
                         scores: [[28, 26, 30, 28], [25, 31, 27, 27]],
@@ -481,26 +493,29 @@
             renderScheduleList();
             renderVisualBoard(currentMatch);
 
-            // 僅對進行中賽事進行倒數與時間走動
+            // 獨立賽事計時器：依據 sports API 提供的秒數進行即時遞增或倒數
             setInterval(() => {
-                if (currentMatch && currentMatch.isLive) {
-                    timerSeconds++;
-                    const liveTimerEl = document.getElementById('live-timer');
-                    if (liveTimerEl) {
-                        let mins = Math.floor(timerSeconds / 60);
-                        let secs = timerSeconds % 60;
-                        liveTimerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                sportsData.forEach(m => {
+                    if (m.isLive) {
+                        m.timerSeconds++;
                     }
+                });
+                // 更新清單與看台上的計時顯示
+                const liveTimerEl = document.getElementById('live-timer');
+                if (liveTimerEl && currentMatch && currentMatch.isLive) {
+                    let mins = Math.floor(currentMatch.timerSeconds / 60);
+                    let secs = currentMatch.timerSeconds % 60;
+                    liveTimerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
                 }
             }, 1000);
         }
 
         const standingsData = {
             football: { 
-                title1: 'Premier League', title2: 'J1 League', 
-                col1: [{rank: 1, name: 'Hull City', win: 28, lose: 4, pct: '88 pts'}], 
-                col2: [{rank: 1, name: 'Yokohama F. Marinos', win: 21, lose: 6, pct: '69 pts'}],
-                finished: [{match: 'Hull City 3 - 1 Ipswich Town', date: 'Finished'}]
+                title1: 'FIFA World Cup Qualifiers', title2: 'Premier League', 
+                col1: [{rank: 1, name: 'Brazil', win: 12, lose: 2, pct: '38 pts'}], 
+                col2: [{rank: 1, name: 'Manchester City', win: 28, lose: 4, pct: '88 pts'}],
+                finished: [{match: 'Brazil 2 - 1 Argentina', date: 'LIVE Finished'}, {match: 'Hull City 1 - 0 Ipswich', date: 'Finished'}]
             },
             npb: { 
                 title1: 'NPB Central', title2: 'NPB Pacific', 
@@ -526,12 +541,14 @@
 
         function filterCategory(cat) {
             currentCat = cat;
-            ['all', 'npb', 'mlb', 'nba', 'football'].forEach(c => {
+            ['featured', 'football', 'npb', 'mlb', 'nba'].forEach(c => {
                 const btn = document.getElementById(`cat-${c}`);
-                if (c === cat) {
-                    btn.className = "px-3 py-1.5 rounded-xl bg-zcGold text-black font-bold transition";
-                } else {
-                    btn.className = "px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition";
+                if (btn) {
+                    if (c === cat) {
+                        btn.className = "px-3 py-1.5 rounded-xl bg-zcGold text-black font-bold transition";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition";
+                    }
                 }
             });
             renderScheduleList();
@@ -541,11 +558,24 @@
             const listEl = document.getElementById('schedule-list');
             listEl.innerHTML = '';
             const t = translations[currentLang] || translations['zh-TW'];
-            const filteredData = currentCat === 'all' ? sportsData : sportsData.filter(m => m.category === currentCat);
+            
+            // 篩選邏輯：精選賽事顯示 featured 或是帶有國際大賽標籤的賽事
+            let filteredData = [];
+            if (currentCat === 'featured') {
+                filteredData = sportsData.filter(m => m.category === 'featured' || m.type.includes('FIFA') || m.type.includes('Olympic'));
+            } else {
+                filteredData = sportsData.filter(m => m.category === currentCat);
+            }
             
             filteredData.forEach(m => {
                 const isSelected = currentMatch && currentMatch.id === m.id;
                 const statusText = t[m.statusKey] || m.statusKey;
+                
+                // 計算當前賽事的動態時分
+                let mins = Math.floor(m.timerSeconds / 60);
+                let secs = m.timerSeconds % 60;
+                let timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
                 const row = document.createElement('div');
                 row.className = `p-3 rounded-xl cursor-pointer border transition flex items-center justify-between ${isSelected ? 'bg-neutral-900 border-zcGold shadow-md shadow-zcGold/10' : 'bg-neutral-950/60 border-neutral-900 hover:border-zcGold/40'}`;
                 row.onclick = () => { currentMatch = m; renderScheduleList(); renderVisualBoard(m); };
@@ -559,7 +589,7 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <span class="text-xs font-bold text-slate-300">${m.score}</span>
-                        <span class="text-[11px] font-black px-2.5 py-1 rounded-md ${m.isLive ? 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse' : 'bg-neutral-800 text-slate-400'}">${m.isLive ? 'LIVE (<span id="live-timer">32:00</span>)' : statusText}</span>
+                        <span class="text-[11px] font-black px-2.5 py-1 rounded-md ${m.isLive ? 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse' : 'bg-neutral-800 text-slate-400'}">${m.isLive ? `LIVE (${timeStr})` : statusText}</span>
                     </div>
                 `;
                 listEl.appendChild(row);
@@ -572,6 +602,10 @@
             const t = translations[currentLang] || translations['zh-TW'];
             const statusText = t[match.statusKey] || match.statusKey;
             
+            let mins = Math.floor(match.timerSeconds / 60);
+            let secs = match.timerSeconds % 60;
+            let timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
             if (match.category === 'npb' || match.category === 'mlb') {
                 const s = match.inningScores;
                 const b = match.details.bases;
@@ -658,7 +692,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- 擴充 NBA 專業個人犯規 (PF) 與全套數據看板 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-2">
                             <div class="text-xs font-bold text-zcGold uppercase border-b border-neutral-800 pb-1">${getTrans(q.teams[0])}</div>
@@ -693,7 +726,7 @@
                 board.innerHTML = `
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚽ ${getTrans(match.type)}</span>
-                        <span class="text-xs ${match.isLive ? 'text-red-400 animate-pulse' : 'text-slate-400'} font-bold">● ${statusText} ${match.isLive ? '<span id="live-timer" class="ml-1">32:00</span>' : ''}</span>
+                        <span class="text-xs ${match.isLive ? 'text-red-400 animate-pulse' : 'text-slate-400'} font-bold">● ${statusText} ${match.isLive ? `<span id="live-timer" class="ml-1">${timeStr}</span>` : ''}</span>
                     </div>
                     <div class="text-center my-4">
                         <div class="text-xl md:text-2xl font-black text-white">${getTrans(match.homeTeam)} vs ${getTrans(match.awayTeam)}</div>
@@ -713,7 +746,6 @@
             }
         }
 
-        // 升級版分頁切換邏輯 (完整支援電腦版與手機版選單高亮狀態)
         function switchMainTab(tab) {
             const scoresSec = document.getElementById('section-scores');
             const standingsSec = document.getElementById('section-standings');
@@ -782,7 +814,7 @@
 
         window.onload = () => { 
             initSportsData();
-            filterCategory('football');
+            filterCategory('featured');
             switchLeague('football');
         };
     </script>
