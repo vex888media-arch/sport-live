@@ -47,6 +47,7 @@
                 </div>
             </div>
             
+            <!-- 電腦版導航鈕 -->
             <nav class="hidden lg:flex space-x-2 text-sm font-semibold">
                 <button onclick="switchMainTab('scores')" id="nav-scores" class="px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20" data-i18n="tabScores">📊 即時比分與動態看台</button>
                 <button onclick="switchMainTab('standings')" id="nav-standings" class="px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition" data-i18n="tabStandings">🏆 多聯盟戰績列表與完賽賽績</button>
@@ -64,6 +65,12 @@
                     <option value="es">Español</option>
                 </select>
             </div>
+        </div>
+
+        <!-- 手機版專屬導航按鈕列 (解決手機無法選擇多聯盟與戰績的問題) -->
+        <div class="lg:hidden flex border-t border-neutral-900 bg-neutral-950 p-2 gap-2 text-xs font-bold">
+            <button onclick="switchMainTab('scores')" id="m-nav-scores" class="flex-1 py-2 rounded-lg bg-zcGold text-black text-center transition" data-i18n="tabScores">📊 即時比分</button>
+            <button onclick="switchMainTab('standings')" id="m-nav-standings" class="flex-1 py-2 rounded-lg bg-neutral-900 text-slate-300 text-center transition border border-neutral-800" data-i18n="tabStandings">🏆 多聯盟戰績</button>
         </div>
     </header>
 
@@ -141,7 +148,7 @@
 
         <!-- 分頁二：多聯盟戰績列表與完賽賽績 -->
         <div id="section-standings" class="hidden space-y-6">
-            <!-- Special Event 模組 2 (在此頁面也呈現，解決頁面空曠問題) -->
+            <!-- Special Event 模組 2 -->
             <div class="special-event-container"></div>
 
             <div class="bg-zcCard rounded-3xl p-8 border gold-border space-y-6">
@@ -176,7 +183,7 @@
     </footer>
 
     <script>
-        // 5國多語系介面字典
+        // 5國多語系介面字典 (含全中文化數據標籤)
         const translations = {
             'zh-TW': {
                 tabScores: '📊 即時比分與動態看台', tabStandings: '🏆 多聯盟戰績列表與完賽賽績',
@@ -200,7 +207,8 @@
                 detailBtn: '回看 / 完賽', liveBtn: 'LIVE', unstarted: '未開賽',
                 rankTeam: '排名 / 球隊', win: '勝', lose: '負', pct: '勝率 / 積分',
                 pitcherLabel: 'PITCHER 先發投手', batterLabel: 'BATTER 打者實況',
-                statusNotStarted: '未開賽 (計時中)', statusFinished: '已完賽', statusLive: '進行中',
+                possessionLabel: '控球率', shotsLabel: '射門數 (射正)', foulsLabel: '個人犯規 (PF)',
+                statusNotStarted: '未開賽 (預計倒數)', statusFinished: '已完賽 (賽事結束)', statusLive: '進行中',
                 recentFinished: '📌 近期完賽戰績結果',
                 footReg: '官方註冊', footChan: 'Telegram 頻道', footSup: 'Mini App 客服'
             },
@@ -226,7 +234,8 @@
                 detailBtn: '回看 / 完赛', liveBtn: 'LIVE', unstarted: '未开赛',
                 rankTeam: '排名 / 球队', win: '胜', lose: '负', pct: '胜率 / 积分',
                 pitcherLabel: 'PITCHER 先发投手', batterLabel: 'BATTER 打者实况',
-                statusNotStarted: '未开赛 (计时中)', statusFinished: '已完赛', statusLive: '进行中',
+                possessionLabel: '控球率', shotsLabel: '射门数 (射正)', foulsLabel: '个人犯规 (PF)',
+                statusNotStarted: '未开赛 (预计倒计时)', statusFinished: '已完赛 (赛事结束)', statusLive: '进行中',
                 recentFinished: '📌 近期完赛战绩结果',
                 footReg: '官方注册', footChan: 'Telegram 频道', footSup: 'Mini App 客服'
             },
@@ -252,6 +261,7 @@
                 detailBtn: 'Finished', liveBtn: 'LIVE', unstarted: 'Upcoming',
                 rankTeam: 'Rank / Team', win: 'W', lose: 'L', pct: 'PCT / PTS',
                 pitcherLabel: 'PITCHER', batterLabel: 'BATTER',
+                possessionLabel: 'Possession', shotsLabel: 'Shots (On Target)', foulsLabel: 'Personal Fouls (PF)',
                 statusNotStarted: 'Upcoming', statusFinished: 'Finished', statusLive: 'LIVE',
                 recentFinished: '📌 Recent Finished Match Results',
                 footReg: 'Register', footChan: 'Telegram', footSup: 'Support'
@@ -278,6 +288,7 @@
                 detailBtn: '終了', liveBtn: 'LIVE', unstarted: '未開始',
                 rankTeam: '順位 / チーム', win: '勝', lose: '敗', pct: '勝率',
                 pitcherLabel: '投手情報', batterLabel: '打者速報',
+                possessionLabel: 'ボール支配率', shotsLabel: 'シュート数 (枠内)', foulsLabel: 'ファウル (PF)',
                 statusNotStarted: '未開始', statusFinished: '試合終了', statusLive: 'ライブ中',
                 recentFinished: '📌 直近の試合結果',
                 footReg: '公式登録', footChan: 'Telegram', footSup: 'サポート'
@@ -304,6 +315,7 @@
                 detailBtn: 'Finalizado', liveBtn: 'EN VIVO', unstarted: 'Próximo',
                 rankTeam: 'Pos / Equipo', win: 'G', lose: 'P', pct: 'PCT / PTS',
                 pitcherLabel: 'LANZADOR', batterLabel: 'BATEADOR',
+                possessionLabel: 'Posesión', shotsLabel: 'Tiros (A Puerta)', foulsLabel: 'Faltas (PF)',
                 statusNotStarted: 'Próximo', statusFinished: 'Finalizado', statusLive: 'En Vivo',
                 recentFinished: '📌 Resultados Recientes',
                 footReg: 'Registro', footChan: 'Telegram', footSup: 'Soporte'
@@ -315,7 +327,7 @@
             "Premier League": { "zh-TW": "英格蘭超級聯賽", "zh-CN": "英格兰超级联赛", "en": "Premier League", "ja": "プレミアリーグ", "es": "Premier League" },
             "J1 League": { "zh-TW": "日本職業足球聯賽 (J1)", "zh-CN": "日本职业足球联赛 (J1)", "en": "J1 League", "ja": "J1リーグ", "es": "Liga J1" },
             "NPB": { "zh-TW": "日本職棒 (NPB)", "zh-CN": "日本职棒 (NPB)", "en": "NPB Baseball", "ja": "日本プロ野球 (NPB)", "es": "Béisbol NPB" },
-            "MLB": { "zh-TW": "美國職棒大聯盟 (MLB)", "zh-CN": "美国职棒大联盟 (MLB)", "en": "MLB Baseball", "ja": "メジャーリーグ (MLB)", "es": "Grounded MLB" },
+            "MLB": { "zh-TW": "美國職棒大聯盟 (MLB)", "zh-CN": "美国职棒大联盟 (MLB)", "en": "MLB Baseball", "ja": "メジャーリーグ (MLB)", "es": "MLB Béisbol" },
             "NBA": { "zh-TW": "美國職籃 (NBA)", "zh-CN": "美国职篮 (NBA)", "en": "NBA Basketball", "ja": "NBAバスケ", "es": "Baloncesto NBA" },
             "Hull City": { "zh-TW": "赫爾城", "zh-CN": "赫尔城", "en": "Hull City", "ja": "ハル・シティ", "es": "Hull City" },
             "Ipswich Town": { "zh-TW": "伊普斯維奇", "zh-CN": "伊普斯维奇", "en": "Ipswich Town", "ja": "イプスウィッチ", "es": "Ipswich Town" },
@@ -339,10 +351,10 @@
             "佐藤 輝明": { "zh-TW": "佐藤 輝明", "zh-CN": "佐藤 辉明", "en": "Teruaki Sato", "ja": "佐藤 輝明", "es": "Teruaki Sato" },
             "Gerrit Cole": { "zh-TW": "柯爾", "zh-CN": "柯尔", "en": "Gerrit Cole", "ja": "ゲリット・コール", "es": "Gerrit Cole" },
             "Shohei Ohtani": { "zh-TW": "大谷 翔平", "zh-CN": "大谷 翔平", "en": "Shohei Ohtani", "ja": "大谷 翔平", "es": "Shohei Ohtani" },
-            "LeBron James": { "zh-TW": "勒布朗·詹姆斯 (76人)", "zh-CN": "勒布朗·詹姆斯 (76人)", "en": "LeBron James (76ers)", "ja": "レブロン・ジェームズ (76ers)", "es": "LeBron James (76ers)" },
-            "Anthony Davis": { "zh-TW": "安東尼·戴維斯 (湖人)", "zh-CN": "安东尼·戴维斯 (湖人)", "en": "Anthony Davis (Lakers)", "ja": "アンソニー・デイビス (Lakers)", "es": "Anthony Davis (Lakers)" },
-            "Austin Reaves": { "zh-TW": "奧斯汀·里夫斯 (湖人)", "zh-CN": "奥斯汀·里夫斯 (湖人)", "en": "Austin Reaves (Lakers)", "ja": "オースティン・リーブス (Lakers)", "es": "Austin Reaves (Lakers)" },
-            "Jayson Tatum": { "zh-TW": "傑森·塔圖姆", "zh-CN": "杰森·塔图姆", "en": "Jayson Tatum", "ja": "ジェイソン・テイタム", "es": "Jayson Tatum" }
+            "Anthony Davis": { "zh-TW": "安東尼·戴維斯", "zh-CN": "安东尼·戴维斯", "en": "Anthony Davis", "ja": "アンソニー・デイビス", "es": "Anthony Davis" },
+            "Austin Reaves": { "zh-TW": "奧斯汀·里夫斯", "zh-CN": "奥斯汀·里夫斯", "en": "Austin Reaves", "ja": "オースティン・リーブス", "es": "Austin Reaves" },
+            "Jayson Tatum": { "zh-TW": "傑森·塔圖姆", "zh-CN": "杰森·塔图姆", "en": "Jayson Tatum", "ja": "ジェイソン・テイタム", "es": "Jayson Tatum" },
+            "Jaylen Brown": { "zh-TW": "傑倫·布朗", "zh-CN": "杰伦·布朗", "en": "Jaylen Brown", "ja": "ジェイレン・ブラウン", "es": "Jaylen Brown" }
         };
 
         function getTrans(name) {
@@ -356,7 +368,7 @@
         let currentCat = 'football';
         let sportsData = [];
         let currentMatch = null;
-        let timerSeconds = 1920;
+        let timerSeconds = 1920; // 模擬 32 分鐘
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -442,7 +454,7 @@
                         bases: { first: false, second: false, third: false }
                     }
                 },
-                // 校正 NBA 湖人隊與 76 人隊最新陣容資料
+                // NBA 包含全套犯規 (PF)、助攻 (AST)、抄截 (STL) 專業數據結構
                 {
                     id: 'nba1', category: 'nba', type: 'NBA', time: '10:00',
                     homeTeam: 'Boston Celtics', awayTeam: 'Los Angeles Lakers', statusKey: 'statusFinished', score: '112 - 110', isLive: false,
@@ -453,11 +465,12 @@
                     },
                     lineups: {
                         away: [
-                            { name: 'Anthony Davis', pts: '28 PTS', reb: '14 REB', ast: '2 BLK' },
-                            { name: 'Austin Reaves', pts: '22 PTS', reb: '5 REB', ast: '7 AST' }
+                            { name: 'Anthony Davis', pts: '28 PTS', reb: '14 REB', ast: '2 AST', pf: '2 PF', stl: '3 STL' },
+                            { name: 'Austin Reaves', pts: '22 PTS', reb: '5 REB', ast: '7 AST', pf: '3 PF', stl: '1 STL' }
                         ],
                         home: [
-                            { name: 'Jayson Tatum', pts: '36 PTS', reb: '8 REB', ast: '4 AST' }
+                            { name: 'Jayson Tatum', pts: '36 PTS', reb: '8 REB', ast: '4 AST', pf: '1 PF', stl: '2 STL' },
+                            { name: 'Jaylen Brown', pts: '24 PTS', reb: '6 REB', ast: '3 AST', pf: '4 PF', stl: '1 STL' }
                         ]
                     }
                 }
@@ -468,13 +481,16 @@
             renderScheduleList();
             renderVisualBoard(currentMatch);
 
+            // 僅對進行中賽事進行倒數與時間走動
             setInterval(() => {
-                timerSeconds++;
-                const liveTimerEl = document.getElementById('live-timer');
-                if (liveTimerEl) {
-                    let mins = Math.floor(timerSeconds / 60);
-                    let secs = timerSeconds % 60;
-                    liveTimerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                if (currentMatch && currentMatch.isLive) {
+                    timerSeconds++;
+                    const liveTimerEl = document.getElementById('live-timer');
+                    if (liveTimerEl) {
+                        let mins = Math.floor(timerSeconds / 60);
+                        let secs = timerSeconds % 60;
+                        liveTimerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                    }
                 }
             }, 1000);
         }
@@ -482,14 +498,14 @@
         const standingsData = {
             football: { 
                 title1: 'Premier League', title2: 'J1 League', 
-                col1: [{rank: 1, name: 'Manchester City', win: 28, lose: 4, pct: '88 pts'}], 
+                col1: [{rank: 1, name: 'Hull City', win: 28, lose: 4, pct: '88 pts'}], 
                 col2: [{rank: 1, name: 'Yokohama F. Marinos', win: 21, lose: 6, pct: '69 pts'}],
-                finished: [{match: 'Manchester City 3 - 1 Manchester United', date: 'Finished'}, {match: 'Liverpool 2 - 0 Arsenal', date: 'Finished'}]
+                finished: [{match: 'Hull City 3 - 1 Ipswich Town', date: 'Finished'}]
             },
             npb: { 
                 title1: 'NPB Central', title2: 'NPB Pacific', 
                 col1: [{rank: 1, name: 'Hanshin Tigers', win: 81, lose: 59, pct: '.579'}], 
-                col2: [{rank: 1, name: 'Fukuoka SoftBank Hawks', win: 88, lose: 52, pct: '.629'}],
+                col2: [{rank: 1, name: 'Yomiuri Giants', win: 88, lose: 52, pct: '.629'}],
                 finished: [{match: 'Yomiuri Giants 4 - 2 Hanshin Tigers', date: 'Finished'}]
             },
             mlb: { 
@@ -502,7 +518,7 @@
                 title1: 'NBA Eastern', title2: 'NBA Western', 
                 col1: [{rank: 1, name: 'Boston Celtics', win: 52, lose: 15, pct: '.776'}], 
                 col2: [{rank: 1, name: 'Los Angeles Lakers', win: 48, lose: 20, pct: '.706'}],
-                finished: [{match: 'LA Lakers 112 - 110 Boston Celtics', date: 'Finished'}, {match: 'Philadelphia 76ers 108 - 102 Knicks', date: 'Finished'}]
+                finished: [{match: 'LA Lakers 112 - 110 Boston Celtics', date: 'Finished'}]
             }
         };
 
@@ -642,14 +658,33 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- 擴充 NBA 專業個人犯規 (PF) 與全套數據看板 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-2">
                             <div class="text-xs font-bold text-zcGold uppercase border-b border-neutral-800 pb-1">${getTrans(q.teams[0])}</div>
-                            ${lineups.away.map(p => `<div class="flex justify-between text-xs py-1"><span class="font-bold text-white">${getTrans(p.name)}</span><span class="text-slate-400">${p.pts} | ${p.reb}</span></div>`).join('')}
+                            ${lineups.away.map(p => `
+                                <div class="flex justify-between items-center text-xs py-1.5 border-b border-neutral-800/40">
+                                    <span class="font-bold text-white">${getTrans(p.name)}</span>
+                                    <div class="text-slate-400 flex gap-2">
+                                        <span class="text-zcGold font-bold">${p.pts}</span>
+                                        <span>${p.reb}</span>
+                                        <span>${p.ast}</span>
+                                        <span class="text-red-400 font-bold bg-red-500/10 px-1 rounded">${p.pf}</span>
+                                    </div>
+                                </div>`).join('')}
                         </div>
                         <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-2">
                             <div class="text-xs font-bold text-zcGold uppercase border-b border-neutral-800 pb-1">${getTrans(q.teams[1])}</div>
-                            ${lineups.home.map(p => `<div class="flex justify-between text-xs py-1"><span class="font-bold text-white">${getTrans(p.name)}</span><span class="text-slate-400">${p.pts} | ${p.reb}</span></div>`).join('')}
+                            ${lineups.home.map(p => `
+                                <div class="flex justify-between items-center text-xs py-1.5 border-b border-neutral-800/40">
+                                    <span class="font-bold text-white">${getTrans(p.name)}</span>
+                                    <div class="text-slate-400 flex gap-2">
+                                        <span class="text-zcGold font-bold">${p.pts}</span>
+                                        <span>${p.reb}</span>
+                                        <span>${p.ast}</span>
+                                        <span class="text-red-400 font-bold bg-red-500/10 px-1 rounded">${p.pf}</span>
+                                    </div>
+                                </div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -658,34 +693,55 @@
                 board.innerHTML = `
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚽ ${getTrans(match.type)}</span>
-                        <span class="text-xs ${match.isLive ? 'text-red-400 animate-pulse' : 'text-slate-400'} font-bold">● ${statusText} <span id="live-timer" class="ml-1">32:00</span></span>
+                        <span class="text-xs ${match.isLive ? 'text-red-400 animate-pulse' : 'text-slate-400'} font-bold">● ${statusText} ${match.isLive ? '<span id="live-timer" class="ml-1">32:00</span>' : ''}</span>
                     </div>
                     <div class="text-center my-4">
                         <div class="text-xl md:text-2xl font-black text-white">${getTrans(match.homeTeam)} vs ${getTrans(match.awayTeam)}</div>
                         <div class="text-3xl md:text-5xl font-black text-zcGold gold-glow my-3">${match.score}</div>
                     </div>
                     <div class="grid grid-cols-2 gap-4 text-xs my-4 max-w-xl mx-auto">
-                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">POSSESSION: ${d.possessionRate}</div>
-                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">SHOTS: ${d.shotsTotal}</div>
+                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">
+                            <div class="text-zcGold mb-1">${t.possessionLabel}</div>
+                            <div>${d.possessionRate}</div>
+                        </div>
+                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">
+                            <div class="text-zcGold mb-1">${t.shotsLabel}</div>
+                            <div>${d.shotsTotal}</div>
+                        </div>
                     </div>
                 `;
             }
         }
 
+        // 升級版分頁切換邏輯 (完整支援電腦版與手機版選單高亮狀態)
         function switchMainTab(tab) {
             const scoresSec = document.getElementById('section-scores');
             const standingsSec = document.getElementById('section-standings');
+            
             const navScores = document.getElementById('nav-scores');
             const navStandings = document.getElementById('nav-standings');
+            const mNavScores = document.getElementById('m-nav-scores');
+            const mNavStandings = document.getElementById('m-nav-standings');
 
             if (tab === 'scores') {
-                scoresSec.classList.remove('hidden'); standingsSec.classList.add('hidden');
+                scoresSec.classList.remove('hidden'); 
+                standingsSec.classList.add('hidden');
+                
                 navScores.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
                 navStandings.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
+                
+                mNavScores.className = "flex-1 py-2 rounded-lg bg-zcGold text-black text-center transition font-bold";
+                mNavStandings.className = "flex-1 py-2 rounded-lg bg-neutral-900 text-slate-300 text-center transition border border-neutral-800 font-bold";
             } else {
-                scoresSec.classList.add('hidden'); standingsSec.classList.remove('hidden');
+                scoresSec.classList.add('hidden'); 
+                standingsSec.classList.remove('hidden');
+                
                 navStandings.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
                 navScores.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
+                
+                mNavStandings.className = "flex-1 py-2 rounded-lg bg-zcGold text-black text-center transition font-bold";
+                mNavScores.className = "flex-1 py-2 rounded-lg bg-neutral-900 text-slate-300 text-center transition border border-neutral-800 font-bold";
+                
                 switchLeague('football');
             }
         }
