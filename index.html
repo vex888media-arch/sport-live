@@ -22,7 +22,6 @@
         body { background-color: #08080a; color: #f3f4f6; font-family: system-ui, sans-serif; }
         .gold-border { border-color: rgba(212, 175, 55, 0.3); }
         .gold-glow { text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
-        /* 隱藏橫向滾動條但保持滑動功能 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -75,7 +74,7 @@
         <!-- 分頁一：即時比分與動態看台 -->
         <div id="section-scores" class="space-y-6">
             
-            <!-- 1. Special Event (ZC 獨家活動 Banner 展示區) -->
+            <!-- 1. Special Event (支援使用 Telegram 官方頻道圖片網址) -->
             <div class="relative rounded-3xl overflow-hidden border gold-border shadow-2xl bg-gradient-to-r from-neutral-900 via-neutral-950 to-neutral-900 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-3 max-w-xl">
                     <span class="bg-zcGold/20 text-zcGold border border-zcGold/30 text-xs font-black px-3 py-1 rounded-full">SPECIAL EVENT</span>
@@ -86,39 +85,51 @@
                         <a href="https://t.me/ZCYLC_Bot" target="_blank" class="px-5 py-2.5 rounded-xl bg-neutral-800 text-slate-200 border border-neutral-700 font-bold text-xs hover:bg-neutral-700 transition" data-i18n="eventBtn2">開啟 Mini App</a>
                     </div>
                 </div>
+                <!-- 活動宣傳圖 (可直接換成你在 TG 頻道發布的圖片連結) -->
                 <div class="w-full md:w-80 h-44 rounded-2xl bg-neutral-900 border gold-border overflow-hidden flex items-center justify-center relative group">
-                    <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" alt="ZC Event Banner" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80">
+                    <img id="event-banner-img" src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" alt="ZC TG Event Banner" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-3">
                         <span class="text-[10px] font-bold text-zcGold bg-black/80 px-2 py-1 rounded" data-i18n="eventBadge">ZC VIP 活動進行中</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. 熱門賽事看板選擇 (改成橫排滾動卡片設計) -->
+            <!-- 2. 熱門賽事看板選擇 (NPB、MLB、NBA、國際足球四大分類) -->
             <div class="bg-zcCard rounded-3xl p-5 border gold-border shadow-xl">
-                <div class="flex justify-between items-center mb-4 pb-2 border-b border-neutral-800">
-                    <h2 class="text-sm font-black text-zcGold tracking-wider uppercase" data-i18n="matchListTitle">⚡ 今日熱門賽事看板 (橫向選擇)</h2>
-                    <span class="text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20 animate-pulse">● LIVE 即時更新</span>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-neutral-800">
+                    <h2 class="text-sm font-black text-zcGold tracking-wider uppercase" data-i18n="matchListTitle">⚡ 今日熱門賽事看板</h2>
+                    
+                    <!-- 四大賽事分類篩選按鈕 -->
+                    <div class="flex flex-wrap gap-2 text-xs font-bold">
+                        <button onclick="filterCategory('all')" id="cat-all" class="px-3 py-1.5 rounded-xl bg-zcGold text-black transition">全部 (All)</button>
+                        <button onclick="filterCategory('npb')" id="cat-npb" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NPB 日本職棒</button>
+                        <button onclick="filterCategory('mlb')" id="cat-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">MLB 美國職棒</button>
+                        <button onclick="filterCategory('nba')" id="cat-nba" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NBA 美職籃</button>
+                        <button onclick="filterCategory('football')" id="cat-football" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">國際足球聯賽</button>
+                    </div>
                 </div>
-                <!-- 橫排賽事選單容器 -->
+                <!-- 橫排賽事卡片容器 -->
                 <div id="match-horizontal-list" class="flex space-x-4 overflow-x-auto no-scrollbar py-2">
-                    <!-- 由 JS 動態生成橫排賽事卡片 -->
+                    <!-- 由 JS 動態渲染 -->
                 </div>
             </div>
 
             <!-- 3. 熱門賽事 LIVE 動態看台 -->
             <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[520px]">
-                <!-- 動態儀表板呈現 -->
+                <!-- 動態看板內容 -->
             </div>
 
-            <!-- 4. 焦點賽事精華影片 (真實體育 HD 高畫質串流) -->
+            <!-- 4. 焦點賽事精華影片 (整合 Telegram 官方頻道觀看入口與 HD 播放) -->
             <div class="bg-zcCard p-6 rounded-3xl border gold-border">
-                <h3 class="text-sm font-black text-zcGold tracking-wider uppercase mb-4 flex items-center justify-between">
-                    <span data-i18n="highlightTitle">🎬 焦點賽事精華 Highlight</span>
-                    <span class="text-xs text-slate-500">Official Sports HD</span>
-                </h3>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                    <h3 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
+                        <span data-i18n="highlightTitle">🎬 焦點賽事精華 Highlight</span>
+                    </h3>
+                    <a href="https://t.me/ZCYL_Offical" target="_blank" class="text-xs font-bold text-sky-400 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/30 hover:bg-sky-500 hover:text-white transition flex items-center gap-1">
+                        📢 Telegram 官方頻道即時更新 ➔
+                    </a>
+                </div>
                 <div class="relative w-full aspect-video rounded-2xl overflow-hidden border border-neutral-800 shadow-xl">
-                    <!-- 使用真實專業的體育賽事精華 YouTube 連結 -->
                     <iframe id="highlight-player" class="w-full h-full" src="https://www.youtube.com/embed/5qap5aO4i9A" title="Sports Highlight" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
@@ -133,7 +144,7 @@
                         <button onclick="switchLeague('npb')" id="btn-league-npb" class="px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition" data-i18n="npbBtn">NPB 日職</button>
                         <button onclick="switchLeague('mlb')" id="btn-league-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="mlbBtn">MLB 美職</button>
                         <button onclick="switchLeague('nba')" id="btn-league-nba" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="nbaBtn">NBA 籃球</button>
-                        <button onclick="switchLeague('football')" id="btn-league-football" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="footballBtn">歐洲五大聯賽</button>
+                        <button onclick="switchLeague('football')" id="btn-league-football" class="px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700" data-i18n="footballBtn">國際足球聯賽</button>
                     </div>
                 </div>
                 <div id="standings-content" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
@@ -153,7 +164,7 @@
     </footer>
 
     <script>
-        // 5 國完整語系字典檔
+        // 5 國完整語系字典檔 (包含球員名字與賽況狀態)
         const translations = {
             'zh-TW': {
                 tabScores: '📊 即時比分與動態看台',
@@ -170,21 +181,16 @@
                 eventBtn1: '領取獨家活動優惠 ➔',
                 eventBtn2: '開啟 Mini App',
                 eventBadge: 'ZC VIP 活動進行中',
-                matchListTitle: '⚡ 今日熱門賽事看板 (橫向選擇)',
+                matchListTitle: '⚡ 今日熱門賽事看板',
                 highlightTitle: '🎬 焦點賽事精華 Highlight',
                 standingsHeader: '🏆 全球頂級職業運動與足球聯賽戰績排行',
                 detailBtn: '查看戰況',
                 rankTeam: '排名 / 球隊',
-                win: '勝',
-                lose: '負',
-                pct: '勝率 / 積分',
-                npbBtn: 'NPB 日職',
-                mlbBtn: 'MLB 美職',
-                nbaBtn: 'NBA 籃球',
-                footballBtn: '歐洲五大聯賽',
-                footerReg: '官方註冊',
-                footerTG: 'Telegram 頻道',
-                footerApp: 'Mini App 客服'
+                win: '勝', lose: '負', pct: '勝率 / 積分',
+                npbBtn: 'NPB 日職', mlbBtn: 'MLB 美職', nbaBtn: 'NBA 籃球', footballBtn: '國際足球聯賽',
+                footerReg: '官方註冊', footerTG: 'Telegram 頻道', footerApp: 'Mini App 客服',
+                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者',
+                foulLabel: '團隊犯規', timeoutLabel: '剩餘暫停'
             },
             'zh-CN': {
                 tabScores: '📊 即时比分与动态看台',
@@ -201,21 +207,16 @@
                 eventBtn1: '领取独家活动优惠 ➔',
                 eventBtn2: '开启 Mini App',
                 eventBadge: 'ZC VIP 活动进行中',
-                matchListTitle: '⚡ 今日热门赛事看板 (横向选择)',
+                matchListTitle: '⚡ 今日热门赛事看板',
                 highlightTitle: '🎬 焦点赛事精华 Highlight',
                 standingsHeader: '🏆 全球顶级职业运动与足球联赛战绩排行',
                 detailBtn: '查看战况',
                 rankTeam: '排名 / 球队',
-                win: '胜',
-                lose: '负',
-                pct: '胜率 / 积分',
-                npbBtn: 'NPB 日职',
-                mlbBtn: 'MLB 美职',
-                nbaBtn: 'NBA 篮球',
-                footballBtn: '欧洲五大联赛',
-                footerReg: '官方注册',
-                footerTG: 'Telegram 频道',
-                footerApp: 'Mini App 客服'
+                win: '胜', lose: '负', pct: '胜率 / 积分',
+                npbBtn: 'NPB 日职', mlbBtn: 'MLB 美职', nbaBtn: 'NBA 篮球', footballBtn: '国际足球联赛',
+                footerReg: '官方注册', footerTG: 'Telegram 频道', footerApp: 'Mini App 客服',
+                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者',
+                foulLabel: '团队犯规', timeoutLabel: '剩余暂停'
             },
             'en': {
                 tabScores: '📊 Live Scores & Dashboard',
@@ -232,24 +233,19 @@
                 eventBtn1: 'Claim Bonus ➔',
                 eventBtn2: 'Open Mini App',
                 eventBadge: 'VIP Event Live',
-                matchListTitle: '⚡ Featured Matches (Horizontal Scroll)',
+                matchListTitle: '⚡ Featured Matches',
                 highlightTitle: '🎬 Match Highlights',
                 standingsHeader: '🏆 Global Professional Sports Standings',
                 detailBtn: 'View Stats',
                 rankTeam: 'Rank / Team',
-                win: 'W',
-                lose: 'L',
-                pct: 'PCT / PTS',
-                npbBtn: 'NPB',
-                mlbBtn: 'MLB',
-                nbaBtn: 'NBA',
-                footballBtn: 'Football Leagues',
-                footerReg: 'Official Register',
-                footerTG: 'Telegram Channel',
-                footerApp: 'Mini App Support'
+                win: 'W', lose: 'L', pct: 'PCT / PTS',
+                npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'Football',
+                footerReg: 'Official Register', footerTG: 'Telegram Channel', footerApp: 'Mini App Support',
+                pitcherLabel: 'PITCHER', batterLabel: 'BATTER',
+                foulLabel: 'Team Fouls', timeoutLabel: 'Timeouts Left'
             },
             'ja': {
-                tabScores: '📊 ライブスコア＆ダッシュボード',
+                tabScores: '📊 ライブスコア＆一球速報',
                 tabStandings: '🏆 順位表',
                 registerBtn: '🎁 限定登録',
                 officialHub: '⚡ 公式リンク:',
@@ -263,21 +259,16 @@
                 eventBtn1: 'ボーナスを受け取る ➔',
                 eventBtn2: 'Mini Appを開く',
                 eventBadge: 'VIPイベント開催中',
-                matchListTitle: '⚡ 注目試合 (横スクロール)',
+                matchListTitle: '⚡ 注目試合看板',
                 highlightTitle: '🎬 試合ハイライト',
                 standingsHeader: '🏆 グローバルプロスポーツ順位表',
                 detailBtn: '詳細を見る',
                 rankTeam: '順位 / チーム',
-                win: '勝',
-                lose: '敗',
-                pct: '勝率',
-                npbBtn: 'NPB',
-                mlbBtn: 'MLB',
-                nbaBtn: 'NBA',
-                footballBtn: 'サッカー',
-                footerReg: '公式登録',
-                footerTG: 'Telegram チャンネル',
-                footerApp: 'サポート'
+                win: '勝', lose: '敗', pct: '勝率',
+                npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'サッカー',
+                footerReg: '公式登録', footerTG: 'Telegram チャンネル', footerApp: 'サポート',
+                pitcherLabel: '投手', batterLabel: '打者',
+                foulLabel: 'チームファウル', timeoutLabel: 'タイムアウト'
             },
             'es': {
                 tabScores: '📊 En Vivo y Marcadores',
@@ -294,25 +285,21 @@
                 eventBtn1: 'Reclamar Bono ➔',
                 eventBtn2: 'Abrir Mini App',
                 eventBadge: 'Evento VIP en Vivo',
-                matchListTitle: '⚡ Partidos Destacados (Horizontal)',
+                matchListTitle: '⚡ Partidos Destacados',
                 highlightTitle: '🎬 Destacados del Partido',
                 standingsHeader: '🏆 Posiciones de Ligas Mundiales',
                 detailBtn: 'Ver Estadísticas',
                 rankTeam: 'Pos / Equipo',
-                win: 'G',
-                lose: 'P',
-                pct: 'PCT / PTS',
-                npbBtn: 'NPB',
-                mlbBtn: 'MLB',
-                nbaBtn: 'NBA',
-                footballBtn: 'Ligas de Fútbol',
-                footerReg: 'Registro Oficial',
-                footerTG: 'Canal de Telegram',
-                footerApp: 'Soporte Mini App'
+                win: 'G', lose: 'P', pct: 'PCT / PTS',
+                npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'Fútbol',
+                footerReg: 'Registro Oficial', footerTG: 'Canal de Telegram', footerApp: 'Soporte Mini App',
+                pitcherLabel: 'LANZADOR', batterLabel: 'BATEADOR',
+                foulLabel: 'Faltas de Equipo', timeoutLabel: 'Tiempos Fuera'
             }
         };
 
         let currentLang = 'zh-TW';
+        let currentCat = 'all';
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -325,11 +312,11 @@
             switchLeague(currentLeague);
         }
 
-        // 賽事資料庫
+        // 包含完整球員名字的多國語言資料庫
         const sportsData = [
             {
                 id: 'npb1',
-                category: 'baseball',
+                category: 'npb',
                 type: 'NPB 日本職棒',
                 title: '讀賣巨人 vs 阪神虎',
                 status: '7 局下半 (1出局)',
@@ -340,8 +327,8 @@
                     stats: [ [2, 6, 0], [4, 8, 1] ]
                 },
                 details: {
-                    pitcher: { name: '戸郷 翔征', era: '2.14', pitches: '98 球', stats: '6.1局 7K 2保送' },
-                    batter: { name: '佐藤 輝明', avg: '.285', today: '3打數 2安打 (1全壘打 2打點)' },
+                    pitcher: { name: '戸郷 翔征 (Shosei Togo)', era: '2.14', pitches: '98 球', stats: '6.1局 7K 2保送' },
+                    batter: { name: '佐藤 輝明 (Teruaki Sato)', avg: '.285', today: '3打數 2安打 (1全壘打 2打點)' },
                     lastPitch: '⚡ 第 5 球: 152 km/h 直球 (好球命中 - 揮棒落空K)',
                     bso: { balls: 2, strikes: 2, outs: 1 },
                     bases: { first: true, second: false, third: true }
@@ -350,7 +337,7 @@
             },
             {
                 id: 'mlb1',
-                category: 'baseball',
+                category: 'mlb',
                 type: 'MLB 美國職棒',
                 title: '洛杉磯道奇 vs 紐約洋基',
                 status: '8 局上半 (2出局)',
@@ -362,7 +349,7 @@
                 },
                 details: {
                     pitcher: { name: 'Gerrit Cole', era: '2.88', pitches: '104 球', stats: '7.2局 9K' },
-                    batter: { name: '大谷 翔平', avg: '.310', today: '4打數 2安打 (1陽春砲)' },
+                    batter: { name: 'Shohei Ohtani (大谷翔平)', avg: '.310', today: '4打數 2安打 (1陽春砲)' },
                     lastPitch: '⚡ 第 4 球: 88 mph 掃球 (Sweeper) - 界外球',
                     bso: { balls: 3, strikes: 2, outs: 2 },
                     bases: { first: true, second: true, third: false }
@@ -371,7 +358,7 @@
             },
             {
                 id: 'nba1',
-                category: 'basketball',
+                category: 'nba',
                 type: 'NBA 美職籃',
                 title: '洛杉磯湖人 vs 波士頓塞爾提克',
                 status: '第 4 節 02:15',
@@ -396,7 +383,7 @@
             {
                 id: 'football1',
                 category: 'football',
-                type: '歐洲足球賽事',
+                type: '國際足球聯賽',
                 title: '皇家馬德里 vs 巴塞隆納',
                 status: '下半場 82\'',
                 score: '2 - 1',
@@ -407,10 +394,6 @@
                     goals: [
                         { time: '24\'', player: 'Jude Bellingham (皇馬)', type: '⚽ 進球' },
                         { time: '58\'', player: 'Robert Lewandowski (巴塞)', type: '⚽ 進球' }
-                    ],
-                    topScorers: [
-                        { rank: 1, player: 'Kylian Mbappé (皇馬)', goals: '24 ⚽' },
-                        { rank: 2, player: 'Robert Lewandowski (巴塞)', goals: '22 ⚽' }
                     ]
                 },
                 highlightUrl: 'https://www.youtube.com/embed/5qap5aO4i9A'
@@ -447,13 +430,34 @@
         let currentMatch = sportsData[0];
         let currentLeague = 'npb';
 
-        // 渲染橫向賽事卡片選擇列
+        // 依分類篩選橫排賽事卡片
+        function filterCategory(cat) {
+            currentCat = cat;
+            ['all', 'npb', 'mlb', 'nba', 'football'].forEach(c => {
+                const btn = document.getElementById(`cat-${c}`);
+                if (c === cat) {
+                    btn.className = "px-3 py-1.5 rounded-xl bg-zcGold text-black font-bold transition";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition";
+                }
+            });
+            renderMatchHorizontalList();
+        }
+
+        // 渲染橫向賽事選擇卡片
         function renderMatchHorizontalList() {
             const listEl = document.getElementById('match-horizontal-list');
             listEl.innerHTML = '';
             const t = translations[currentLang];
             
-            sportsData.forEach(m => {
+            const filteredData = currentCat === 'all' ? sportsData : sportsData.filter(m => m.category === currentCat);
+            
+            if (filteredData.length === 0) {
+                listEl.innerHTML = `<div class="text-xs text-slate-500 py-4">今日暫無賽事數據</div>`;
+                return;
+            }
+
+            filteredData.forEach(m => {
                 const isSelected = currentMatch.id === m.id;
                 const card = document.createElement('div');
                 card.className = `min-w-[260px] p-4 rounded-2xl cursor-pointer border transition flex flex-col justify-between ${isSelected ? 'bg-neutral-900 border-zcGold shadow-lg shadow-zcGold/20' : 'bg-neutral-950/80 border-neutral-800 hover:border-zcGold/50'}`;
@@ -477,8 +481,9 @@
 
         function renderVisualBoard(match) {
             const board = document.getElementById('visual-board');
+            const t = translations[currentLang];
             
-            if (match.category === 'baseball') {
+            if (match.category === 'npb' || match.category === 'mlb') {
                 const s = match.inningScores;
                 const b = match.details.bases;
                 board.innerHTML = `
@@ -519,7 +524,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 items-center bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800">
                         <div class="space-y-1.5 text-xs text-slate-300">
-                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">PITCHER 投手</span>
+                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.pitcherLabel}</span>
                             <div class="text-sm font-bold text-white">${match.details.pitcher.name}</div>
                             <div>ERA: <span class="text-zcGold font-bold">${match.details.pitcher.era}</span></div>
                             <div class="text-[11px] text-slate-400">${match.details.pitcher.stats}</div>
@@ -541,7 +546,7 @@
                         </div>
 
                         <div class="space-y-1.5 text-xs text-slate-300 text-left md:text-right">
-                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">BATTER 打者</span>
+                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.batterLabel}</span>
                             <div class="text-sm font-bold text-white">${match.details.batter.name}</div>
                             <div>AVG: <span class="text-zcGold font-bold">${match.details.batter.avg}</span></div>
                             <div class="text-[11px] text-slate-400">${match.details.batter.today}</div>
@@ -552,7 +557,7 @@
                         ${match.details.lastPitch}
                     </div>
                 `;
-            } else if (match.category === 'basketball') {
+            } else if (match.category === 'nba') {
                 const q = match.quarters;
                 const l = match.lineups;
                 board.innerHTML = `
