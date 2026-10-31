@@ -74,7 +74,7 @@
         <!-- 分頁一：即時比分與動態看台 -->
         <div id="section-scores" class="space-y-6">
             
-            <!-- 1. Special Event (支援使用 Telegram 官方頻道圖片網址) -->
+            <!-- 1. Special Event (支援使用 Telegram 圖片直鏈即時更新) -->
             <div class="relative rounded-3xl overflow-hidden border gold-border shadow-2xl bg-gradient-to-r from-neutral-900 via-neutral-950 to-neutral-900 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-3 max-w-xl">
                     <span class="bg-zcGold/20 text-zcGold border border-zcGold/30 text-xs font-black px-3 py-1 rounded-full">SPECIAL EVENT</span>
@@ -85,52 +85,60 @@
                         <a href="https://t.me/ZCYLC_Bot" target="_blank" class="px-5 py-2.5 rounded-xl bg-neutral-800 text-slate-200 border border-neutral-700 font-bold text-xs hover:bg-neutral-700 transition" data-i18n="eventBtn2">開啟 Mini App</a>
                     </div>
                 </div>
-                <!-- 活動宣傳圖 (可直接換成你在 TG 頻道發布的圖片連結) -->
+                <!-- 提示：此處可直接更換為你 Telegram 圖床頻道的圖片直鏈 -->
                 <div class="w-full md:w-80 h-44 rounded-2xl bg-neutral-900 border gold-border overflow-hidden flex items-center justify-center relative group">
-                    <img id="event-banner-img" src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" alt="ZC TG Event Banner" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80">
+                    <img id="event-banner-img" src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" alt="TG Event Banner" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-3">
                         <span class="text-[10px] font-bold text-zcGold bg-black/80 px-2 py-1 rounded" data-i18n="eventBadge">ZC VIP 活動進行中</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. 熱門賽事看板選擇 (NPB、MLB、NBA、國際足球四大分類) -->
+            <!-- 2. 熱門賽事看板選擇 (NPB、MLB、NBA、國際足球四大分類 + 橫排滾動) -->
             <div class="bg-zcCard rounded-3xl p-5 border gold-border shadow-xl">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-neutral-800">
                     <h2 class="text-sm font-black text-zcGold tracking-wider uppercase" data-i18n="matchListTitle">⚡ 今日熱門賽事看板</h2>
-                    
-                    <!-- 四大賽事分類篩選按鈕 -->
                     <div class="flex flex-wrap gap-2 text-xs font-bold">
-                        <button onclick="filterCategory('all')" id="cat-all" class="px-3 py-1.5 rounded-xl bg-zcGold text-black transition">全部 (All)</button>
-                        <button onclick="filterCategory('npb')" id="cat-npb" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NPB 日本職棒</button>
-                        <button onclick="filterCategory('mlb')" id="cat-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">MLB 美國職棒</button>
-                        <button onclick="filterCategory('nba')" id="cat-nba" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NBA 美職籃</button>
-                        <button onclick="filterCategory('football')" id="cat-football" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">國際足球聯賽</button>
+                        <button onclick="filterCategory('all')" id="cat-all" class="px-3 py-1.5 rounded-xl bg-zcGold text-black transition">全部</button>
+                        <button onclick="filterCategory('npb')" id="cat-npb" class="px-3 py-1.5 rounded-xl bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NPB 日職</button>
+                        <button onclick="filterCategory('mlb')" id="cat-mlb" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">MLB 美職</button>
+                        <button onclick="filterCategory('nba')" id="cat-nba" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">NBA 籃球</button>
+                        <button onclick="filterCategory('football')" id="cat-football" class="px-3 py-1.5 rounded-lg bg-neutral-900 text-slate-300 hover:text-zcGold border border-neutral-800 transition">國際足球</button>
                     </div>
                 </div>
-                <!-- 橫排賽事卡片容器 -->
-                <div id="match-horizontal-list" class="flex space-x-4 overflow-x-auto no-scrollbar py-2">
-                    <!-- 由 JS 動態渲染 -->
-                </div>
+                <div id="match-horizontal-list" class="flex space-x-4 overflow-x-auto no-scrollbar py-2"></div>
             </div>
 
             <!-- 3. 熱門賽事 LIVE 動態看台 -->
-            <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[520px]">
-                <!-- 動態看板內容 -->
-            </div>
+            <div id="visual-board" class="bg-zcCard rounded-3xl p-6 border gold-border relative shadow-2xl min-h-[520px]"></div>
 
-            <!-- 4. 焦點賽事精華影片 (整合 Telegram 官方頻道觀看入口與 HD 播放) -->
-            <div class="bg-zcCard p-6 rounded-3xl border gold-border">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+            <!-- 4. 焦點賽事精華與大事件深度解析專區 (對接你的 TG 頻道 zcyl_sub) -->
+            <div class="bg-zcCard p-6 rounded-3xl border gold-border space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-neutral-800">
                     <h3 class="text-sm font-black text-zcGold tracking-wider uppercase flex items-center gap-2">
-                        <span data-i18n="highlightTitle">🎬 焦點賽事精華 Highlight</span>
+                        <span data-i18n="highlightTitle">🎬 ZC 體育大事件與賽事深度解析</span>
                     </h3>
-                    <a href="https://t.me/ZCYL_Offical" target="_blank" class="text-xs font-bold text-sky-400 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/30 hover:bg-sky-500 hover:text-white transition flex items-center gap-1">
-                        📢 Telegram 官方頻道即時更新 ➔
+                    <a href="https://t.me/zcyl_sub" target="_blank" class="text-xs font-bold text-sky-400 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/30 hover:bg-sky-500 hover:text-white transition flex items-center gap-1">
+                        📢 前往 ZC 解析頻道觀看完整視頻 ➔
                     </a>
                 </div>
-                <div class="relative w-full aspect-video rounded-2xl overflow-hidden border border-neutral-800 shadow-xl">
-                    <iframe id="highlight-player" class="w-full h-full" src="https://www.youtube.com/embed/5qap5aO4i9A" title="Sports Highlight" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <!-- 嵌入 Telegram 官方頻道預覽卡片或高質感導流面板 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="https://t.me/zcyl_sub" target="_blank" class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800 hover:border-zcGold transition group block">
+                        <div class="text-[10px] text-zcGold font-bold mb-1">🔥 獨家戰術拆解</div>
+                        <div class="text-sm font-bold text-white group-hover:text-zcGold transition">大谷翔平近期打擊軌跡與球速適應深度解析</div>
+                        <div class="text-xs text-slate-400 mt-2">點擊前往 Telegram 頻道看完整解說影片 ➔</div>
+                    </a>
+                    <a href="https://t.me/zcyl_sub" target="_blank" class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800 hover:border-zcGold transition group block">
+                        <div class="text-[10px] text-zcGold font-bold mb-1">📊 數據大事件</div>
+                        <div class="text-sm font-bold text-white group-hover:text-zcGold transition">NBA 季後賽列強對決形勢與球星數據總評</div>
+                        <div class="text-xs text-slate-400 mt-2">點擊前往 Telegram 頻道看完整解說影片 ➔</div>
+                    </a>
+                    <a href="https://t.me/zcyl_sub" target="_blank" class="bg-neutral-900 p-4 rounded-2xl border border-neutral-800 hover:border-zcGold transition group block">
+                        <div class="text-[10px] text-zcGold font-bold mb-1">⚽ 歐冠焦點</div>
+                        <div class="text-sm font-bold text-white group-hover:text-zcGold transition">皇家馬德里致勝戰術與中場核心調度解析</div>
+                        <div class="text-xs text-slate-400 mt-2">點擊前往 Telegram 頻道看完整解說影片 ➔</div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -157,6 +165,8 @@
         <div class="flex justify-center space-x-4 text-[11px] text-slate-400">
             <a href="https://m1.zcu5rclks.shop/register.php?code=AHA886" target="_blank" class="hover:text-zcGold" data-i18n="footerReg">官方註冊</a>
             <span>•</span>
+            <a href="https://t.me/zcyl_sub" target="_blank" class="hover:text-zcGold">賽事解析頻道</a>
+            <span>•</span>
             <a href="https://t.me/ZCYL_Offical" target="_blank" class="hover:text-zcGold" data-i18n="footerTG">Telegram 頻道</a>
             <span>•</span>
             <a href="https://t.me/ZCYLC_Bot" target="_blank" class="hover:text-zcGold" data-i18n="footerApp">Mini App 客服</a>
@@ -164,137 +174,81 @@
     </footer>
 
     <script>
-        // 5 國完整語系字典檔 (包含球員名字與賽況狀態)
         const translations = {
             'zh-TW': {
-                tabScores: '📊 即時比分與動態看台',
-                tabStandings: '🏆 多聯盟戰績排行',
-                registerBtn: '🎁 ZC 獨家開戶',
-                officialHub: '⚡ ZC 官方入口:',
-                regLink: '🔥 立即註冊帳號',
-                mobileLink: '📱 手機版網頁',
-                pcLink: '💻 電腦版網頁',
-                tgApp: '🤖 TG Mini App',
-                tgChannel: '📢 TG 官方頻道',
+                tabScores: '📊 即時比分與動態看台', tabStandings: '🏆 多聯盟戰績排行',
+                registerBtn: '🎁 ZC 獨家開戶', officialHub: '⚡ ZC 官方入口:',
+                regLink: '🔥 立即註冊帳號', mobileLink: '📱 手機版網頁', pcLink: '💻 電腦版網頁',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG 官方頻道',
                 eventTitle: 'ZC 獨家首存尊榮優惠活動',
                 eventDesc: '即刻加入 ZC 體育平台，享有全球最速串流數據與最高額度優惠返利！註冊即送專屬體育紅利禮金。',
-                eventBtn1: '領取獨家活動優惠 ➔',
-                eventBtn2: '開啟 Mini App',
-                eventBadge: 'ZC VIP 活動進行中',
-                matchListTitle: '⚡ 今日熱門賽事看板',
-                highlightTitle: '🎬 焦點賽事精華 Highlight',
+                eventBtn1: '領取獨家活動優惠 ➔', eventBtn2: '開啟 Mini App', eventBadge: 'ZC VIP 活動進行中',
+                matchListTitle: '⚡ 今日熱門賽事看板', highlightTitle: '🎬 ZC 體育大事件與賽事深度解析',
                 standingsHeader: '🏆 全球頂級職業運動與足球聯賽戰績排行',
-                detailBtn: '查看戰況',
-                rankTeam: '排名 / 球隊',
-                win: '勝', lose: '負', pct: '勝率 / 積分',
+                detailBtn: '查看戰況', rankTeam: '排名 / 球隊', win: '勝', lose: '負', pct: '勝率 / 積分',
                 npbBtn: 'NPB 日職', mlbBtn: 'MLB 美職', nbaBtn: 'NBA 籃球', footballBtn: '國際足球聯賽',
                 footerReg: '官方註冊', footerTG: 'Telegram 頻道', footerApp: 'Mini App 客服',
-                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者',
-                foulLabel: '團隊犯規', timeoutLabel: '剩餘暫停'
+                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者'
             },
             'zh-CN': {
-                tabScores: '📊 即时比分与动态看台',
-                tabStandings: '🏆 多联盟战绩排行',
-                registerBtn: '🎁 ZC 独家开户',
-                officialHub: '⚡ ZC 官方入口:',
-                regLink: '🔥 立即注册账号',
-                mobileLink: '📱 手机版网页',
-                pcLink: '💻 电脑版网页',
-                tgApp: '🤖 TG Mini App',
-                tgChannel: '📢 TG 官方频道',
+                tabScores: '📊 即时比分与动态看台', tabStandings: '🏆 多联盟战绩排行',
+                registerBtn: '🎁 ZC 独家开户', officialHub: '⚡ ZC 官方入口:',
+                regLink: '🔥 立即注册账号', mobileLink: '📱 手机版网页', pcLink: '💻 电脑版网页',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG 官方频道',
                 eventTitle: 'ZC 独家首存尊荣优惠活动',
                 eventDesc: '即刻加入 ZC 体育平台，享有全球最速流媒体数据与最高额度优惠返利！注册即送专属体育红利礼金。',
-                eventBtn1: '领取独家活动优惠 ➔',
-                eventBtn2: '开启 Mini App',
-                eventBadge: 'ZC VIP 活动进行中',
-                matchListTitle: '⚡ 今日热门赛事看板',
-                highlightTitle: '🎬 焦点赛事精华 Highlight',
+                eventBtn1: '领取独家活动优惠 ➔', eventBtn2: '开启 Mini App', eventBadge: 'ZC VIP 活动进行中',
+                matchListTitle: '⚡ 今日热门赛事看板', highlightTitle: '🎬 ZC 体育大事件与赛事深度解析',
                 standingsHeader: '🏆 全球顶级职业运动与足球联赛战绩排行',
-                detailBtn: '查看战况',
-                rankTeam: '排名 / 球队',
-                win: '胜', lose: '负', pct: '胜率 / 积分',
+                detailBtn: '查看战况', rankTeam: '排名 / 球队', win: '胜', lose: '负', pct: '胜率 / 积分',
                 npbBtn: 'NPB 日职', mlbBtn: 'MLB 美职', nbaBtn: 'NBA 篮球', footballBtn: '国际足球联赛',
                 footerReg: '官方注册', footerTG: 'Telegram 频道', footerApp: 'Mini App 客服',
-                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者',
-                foulLabel: '团队犯规', timeoutLabel: '剩余暂停'
+                pitcherLabel: 'PITCHER 投手', batterLabel: 'BATTER 打者'
             },
             'en': {
-                tabScores: '📊 Live Scores & Dashboard',
-                tabStandings: '🏆 Standings',
-                registerBtn: '🎁 Exclusive Register',
-                officialHub: '⚡ Official Hub:',
-                regLink: '🔥 Register Now',
-                mobileLink: '📱 Mobile Version',
-                pcLink: '💻 PC Version',
-                tgApp: '🤖 TG Mini App',
-                tgChannel: '📢 TG Channel',
+                tabScores: '📊 Live Scores & Dashboard', tabStandings: '🏆 Standings',
+                registerBtn: '🎁 Exclusive Register', officialHub: '⚡ Official Hub:',
+                regLink: '🔥 Register Now', mobileLink: '📱 Mobile Version', pcLink: '💻 PC Version',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG Channel',
                 eventTitle: 'ZC Exclusive VIP Deposit Bonus',
                 eventDesc: 'Join ZC Sports now to enjoy ultra-fast live data and top-tier rebate rewards!',
-                eventBtn1: 'Claim Bonus ➔',
-                eventBtn2: 'Open Mini App',
-                eventBadge: 'VIP Event Live',
-                matchListTitle: '⚡ Featured Matches',
-                highlightTitle: '🎬 Match Highlights',
+                eventBtn1: 'Claim Bonus ➔', eventBtn2: 'Open Mini App', eventBadge: 'VIP Event Live',
+                matchListTitle: '⚡ Featured Matches', highlightTitle: '🎬 ZC Sports Analysis & Major Events',
                 standingsHeader: '🏆 Global Professional Sports Standings',
-                detailBtn: 'View Stats',
-                rankTeam: 'Rank / Team',
-                win: 'W', lose: 'L', pct: 'PCT / PTS',
+                detailBtn: 'View Stats', rankTeam: 'Rank / Team', win: 'W', lose: 'L', pct: 'PCT / PTS',
                 npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'Football',
                 footerReg: 'Official Register', footerTG: 'Telegram Channel', footerApp: 'Mini App Support',
-                pitcherLabel: 'PITCHER', batterLabel: 'BATTER',
-                foulLabel: 'Team Fouls', timeoutLabel: 'Timeouts Left'
+                pitcherLabel: 'PITCHER', batterLabel: 'BATTER'
             },
             'ja': {
-                tabScores: '📊 ライブスコア＆一球速報',
-                tabStandings: '🏆 順位表',
-                registerBtn: '🎁 限定登録',
-                officialHub: '⚡ 公式リンク:',
-                regLink: '🔥 今すぐ登録',
-                mobileLink: '📱 モバイル版',
-                pcLink: '💻 PC版',
-                tgApp: '🤖 TG Mini App',
-                tgChannel: '📢 TG チャンネル',
+                tabScores: '📊 ライブスコア＆ダッシュボード', tabStandings: '🏆 順位表',
+                registerBtn: '🎁 限定登録', officialHub: '⚡ 公式リンク:',
+                regLink: '🔥 今すぐ登録', mobileLink: '📱 モバイル版', pcLink: '💻 PC版',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 TG チャンネル',
                 eventTitle: 'ZC プレミアム初回入金ボーナス',
                 eventDesc: '今すぐZCスポーツに参加して、最速のライブデータと最高峰の特典を手に入れよう！',
-                eventBtn1: 'ボーナスを受け取る ➔',
-                eventBtn2: 'Mini Appを開く',
-                eventBadge: 'VIPイベント開催中',
-                matchListTitle: '⚡ 注目試合看板',
-                highlightTitle: '🎬 試合ハイライト',
+                eventBtn1: 'ボーナスを受け取る ➔', eventBtn2: 'Mini Appを開く', eventBadge: 'VIPイベント開催中',
+                matchListTitle: '⚡ 注目試合看板', highlightTitle: '🎬 ZC スポーツ分析＆大事件解説',
                 standingsHeader: '🏆 グローバルプロスポーツ順位表',
-                detailBtn: '詳細を見る',
-                rankTeam: '順位 / チーム',
-                win: '勝', lose: '敗', pct: '勝率',
+                detailBtn: '詳細を見る', rankTeam: '順位 / チーム', win: '勝', lose: '敗', pct: '勝率',
                 npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'サッカー',
                 footerReg: '公式登録', footerTG: 'Telegram チャンネル', footerApp: 'サポート',
-                pitcherLabel: '投手', batterLabel: '打者',
-                foulLabel: 'チームファウル', timeoutLabel: 'タイムアウト'
+                pitcherLabel: '投手', batterLabel: '打者'
             },
             'es': {
-                tabScores: '📊 En Vivo y Marcadores',
-                tabStandings: '🏆 Posiciones',
-                registerBtn: '🎁 Registro Exclusivo',
-                officialHub: '⚡ Enlaces Oficiales:',
-                regLink: '🔥 Registrarse',
-                mobileLink: '📱 Versión Móvil',
-                pcLink: '💻 Versión PC',
-                tgApp: '🤖 TG Mini App',
-                tgChannel: '📢 Canal TG',
+                tabScores: '📊 En Vivo y Marcadores', tabStandings: '🏆 Posiciones',
+                registerBtn: '🎁 Registro Exclusivo', officialHub: '⚡ Enlaces Oficiales:',
+                regLink: '🔥 Registrarse', mobileLink: '📱 Versión Móvil', pcLink: '💻 Versión PC',
+                tgApp: '🤖 TG Mini App', tgChannel: '📢 Canal TG',
                 eventTitle: 'Bono Exclusivo VIP de ZC Sports',
                 eventDesc: '¡Únete ahora para disfrutar de datos en vivo ultrarrápidos y las mejores bonificaciones!',
-                eventBtn1: 'Reclamar Bono ➔',
-                eventBtn2: 'Abrir Mini App',
-                eventBadge: 'Evento VIP en Vivo',
-                matchListTitle: '⚡ Partidos Destacados',
-                highlightTitle: '🎬 Destacados del Partido',
+                eventBtn1: 'Reclamar Bono ➔', eventBtn2: 'Abrir Mini App', eventBadge: 'Evento VIP en Vivo',
+                matchListTitle: '⚡ Partidos Destacados', highlightTitle: '🎬 Análisis y Grandes Eventos de ZC Sports',
                 standingsHeader: '🏆 Posiciones de Ligas Mundiales',
-                detailBtn: 'Ver Estadísticas',
-                rankTeam: 'Pos / Equipo',
-                win: 'G', lose: 'P', pct: 'PCT / PTS',
+                detailBtn: 'Ver Estadísticas', rankTeam: 'Pos / Equipo', win: 'G', lose: 'P', pct: 'PCT / PTS',
                 npbBtn: 'NPB', mlbBtn: 'MLB', nbaBtn: 'NBA', footballBtn: 'Fútbol',
                 footerReg: 'Registro Oficial', footerTG: 'Canal de Telegram', footerApp: 'Soporte Mini App',
-                pitcherLabel: 'LANZADOR', batterLabel: 'BATEADOR',
-                foulLabel: 'Faltas de Equipo', timeoutLabel: 'Tiempos Fuera'
+                pitcherLabel: 'LANZADOR', batterLabel: 'BATEADOR'
             }
         };
 
@@ -312,125 +266,42 @@
             switchLeague(currentLeague);
         }
 
-        // 包含完整球員名字的多國語言資料庫
         const sportsData = [
             {
-                id: 'npb1',
-                category: 'npb',
-                type: 'NPB 日本職棒',
-                title: '讀賣巨人 vs 阪神虎',
-                status: '7 局下半 (1出局)',
-                score: '4 - 2',
-                inningScores: {
-                    teams: ['讀賣巨人 (客)', '阪神虎 (主)'],
-                    scores: [[0, 1, 0, 0, 1, 0, 0, 'X', 'X'], [1, 0, 2, 0, 0, 0, 1, 'X', 'X']],
-                    stats: [ [2, 6, 0], [4, 8, 1] ]
-                },
-                details: {
-                    pitcher: { name: '戸郷 翔征 (Shosei Togo)', era: '2.14', pitches: '98 球', stats: '6.1局 7K 2保送' },
-                    batter: { name: '佐藤 輝明 (Teruaki Sato)', avg: '.285', today: '3打數 2安打 (1全壘打 2打點)' },
-                    lastPitch: '⚡ 第 5 球: 152 km/h 直球 (好球命中 - 揮棒落空K)',
-                    bso: { balls: 2, strikes: 2, outs: 1 },
-                    bases: { first: true, second: false, third: true }
-                },
-                highlightUrl: 'https://www.youtube.com/embed/5qap5aO4i9A'
+                id: 'npb1', category: 'npb', type: 'NPB 日本職棒',
+                title: '讀賣巨人 vs 阪神虎', status: '7 局下半 (1出局)', score: '4 - 2',
+                inningScores: { teams: ['讀賣巨人 (客)', '阪神虎 (主)'], scores: [[0, 1, 0, 0, 1, 0, 0, 'X', 'X'], [1, 0, 2, 0, 0, 0, 1, 'X', 'X']], stats: [ [2, 6, 0], [4, 8, 1] ] },
+                details: { pitcher: { name: '戸郷 翔征', era: '2.14', stats: '6.1局 7K 2保送' }, batter: { name: '佐藤 輝明', avg: '.285', today: '3打數 2安打 (1全壘打)' }, lastPitch: '⚡ 第 5 球: 152 km/h 直球 (好球命中)', bso: { balls: 2, strikes: 2, outs: 1 }, bases: { first: true, second: false, third: true } }
             },
             {
-                id: 'mlb1',
-                category: 'mlb',
-                type: 'MLB 美國職棒',
-                title: '洛杉磯道奇 vs 紐約洋基',
-                status: '8 局上半 (2出局)',
-                score: '5 - 3',
-                inningScores: {
-                    teams: ['道奇 (客)', '洋基 (主)'],
-                    scores: [[1, 0, 2, 0, 0, 1, 0, 1, 'X'], [0, 2, 0, 1, 0, 0, 0, 'X', 'X']],
-                    stats: [ [5, 9, 0], [3, 5, 1] ]
-                },
-                details: {
-                    pitcher: { name: 'Gerrit Cole', era: '2.88', pitches: '104 球', stats: '7.2局 9K' },
-                    batter: { name: 'Shohei Ohtani (大谷翔平)', avg: '.310', today: '4打數 2安打 (1陽春砲)' },
-                    lastPitch: '⚡ 第 4 球: 88 mph 掃球 (Sweeper) - 界外球',
-                    bso: { balls: 3, strikes: 2, outs: 2 },
-                    bases: { first: true, second: true, third: false }
-                },
-                highlightUrl: 'https://www.youtube.com/embed/5qap5aO4i9A'
+                id: 'mlb1', category: 'mlb', type: 'MLB 美國職棒',
+                title: '洛杉磯道奇 vs 紐約洋基', status: '8 局上半 (2出局)', score: '5 - 3',
+                inningScores: { teams: ['道奇 (客)', '洋基 (主)'], scores: [[1, 0, 2, 0, 0, 1, 0, 1, 'X'], [0, 2, 0, 1, 0, 0, 0, 'X', 'X']], stats: [ [5, 9, 0], [3, 5, 1] ] },
+                details: { pitcher: { name: 'Gerrit Cole', era: '2.88', stats: '7.2局 9K' }, batter: { name: '大谷 翔平 (Shohei Ohtani)', avg: '.310', today: '4打數 2安打 (1全壘打)' }, lastPitch: '⚡ 第 4 球: 88 mph 掃球 (Sweeper)', bso: { balls: 3, strikes: 2, outs: 2 }, bases: { first: true, second: true, third: false } }
             },
             {
-                id: 'nba1',
-                category: 'nba',
-                type: 'NBA 美職籃',
-                title: '洛杉磯湖人 vs 波士頓塞爾提克',
-                status: '第 4 節 02:15',
-                score: '108 - 105',
-                quarters: {
-                    teams: ['洛杉磯湖人 (LAL)', '波士頓塞爾提克 (BOS)'],
-                    scores: [[28, 26, 30, 24], [25, 31, 27, 22]],
-                    total: [108, 105]
-                },
-                lineups: {
-                    away: [
-                        { name: 'LeBron James (SF)', pts: '32 PTS', ast: '8 AST', reb: '9 REB' },
-                        { name: 'Anthony Davis (C)', pts: '26 PTS', reb: '14 REB', blk: '3 BLK' }
-                    ],
-                    home: [
-                        { name: 'Jayson Tatum (SF)', pts: '34 PTS', reb: '10 REB', ast: '5 AST' },
-                        { name: 'Jaylen Brown (SG)', pts: '28 PTS', reb: '6 REB', ast: '3 AST' }
-                    ]
-                },
-                highlightUrl: 'https://www.youtube.com/embed/5qap5aO4i9A'
+                id: 'nba1', category: 'nba', type: 'NBA 美職籃',
+                title: '洛杉磯湖人 vs 波士頓塞爾提克', status: '第 4 節 02:15', score: '108 - 105',
+                quarters: { teams: ['洛杉磯湖人 (LAL)', '波士頓塞爾提克 (BOS)'], scores: [[28, 26, 30, 24], [25, 31, 27, 22]], total: [108, 105] },
+                lineups: { away: [{ name: 'LeBron James (SF)', pts: '32 PTS', ast: '8 AST', reb: '9 REB' }], home: [{ name: 'Jayson Tatum (SF)', pts: '34 PTS', reb: '10 REB', ast: '5 AST' }] }
             },
             {
-                id: 'football1',
-                category: 'football',
-                type: '國際足球聯賽',
-                title: '皇家馬德里 vs 巴塞隆納',
-                status: '下半場 82\'',
-                score: '2 - 1',
-                details: {
-                    possessionRate: '控球率: 52% - 48%',
-                    shotsTotal: '射門數 (射正): 14(7) - 11(5)',
-                    foulsCards: '🟨 黃牌: 2 - 3 | 🟥 紅牌: 0 - 0',
-                    goals: [
-                        { time: '24\'', player: 'Jude Bellingham (皇馬)', type: '⚽ 進球' },
-                        { time: '58\'', player: 'Robert Lewandowski (巴塞)', type: '⚽ 進球' }
-                    ]
-                },
-                highlightUrl: 'https://www.youtube.com/embed/5qap5aO4i9A'
+                id: 'football1', category: 'football', type: '國際足球聯賽',
+                title: '皇家馬德里 vs 巴塞隆納', status: '下半場 82\'', score: '2 - 1',
+                details: { possessionRate: '控球率: 52% - 48%', shotsTotal: '射門數: 14 - 11', goals: [{ time: '24\'', player: 'Jude Bellingham (皇馬)', type: '⚽ 進球' }] }
             }
         ];
 
         const standingsData = {
-            npb: {
-                title1: '日本職棒 - 中央聯盟 (Central)',
-                title2: '日本職棒 - 太平洋聯盟 (Pacific)',
-                col1: [{rank: 1, name: '阪神虎', win: 81, lose: 59, pct: '.579'}, {rank: 2, name: '讀賣巨人', win: 77, lose: 59, pct: '.566'}],
-                col2: [{rank: 1, name: '福岡軟銀鷹', win: 88, lose: 52, pct: '.629'}, {rank: 2, name: '日本火腿', win: 75, lose: 60, pct: '.556'}]
-            },
-            mlb: {
-                title1: '美國聯盟 (American League)',
-                title2: '國家聯盟 (National League)',
-                col1: [{rank: 1, name: '紐約洋基', win: 94, lose: 68, pct: '.580'}, {rank: 2, name: '金鶯', win: 91, lose: 71, pct: '.562'}],
-                col2: [{rank: 1, name: '洛杉磯道奇', win: 98, lose: 64, pct: '.605'}, {rank: 2, name: '費城人', win: 95, lose: 67, pct: '.586'}]
-            },
-            nba: {
-                title1: '東區聯盟 (Eastern Conference)',
-                title2: '西區聯盟 (Western Conference)',
-                col1: [{rank: 1, name: '塞爾提克', win: 52, lose: 15, pct: '.776'}, {rank: 2, name: '紐約尼克', win: 45, lose: 22, pct: '.672'}],
-                col2: [{rank: 1, name: '丹佛金塊', win: 48, lose: 20, pct: '.706'}, {rank: 2, name: '明尼蘇達灰狼', win: 46, lose: 21, pct: '.687'}]
-            },
-            football: {
-                title1: '英格蘭超級聯賽 (Premier League)',
-                title2: '西班牙甲級聯賽 (La Liga)',
-                col1: [{rank: 1, name: '曼城', win: 28, lose: 4, pct: '88 pts'}, {rank: 2, name: '兵工廠', win: 27, lose: 5, pct: '86 pts'}],
-                col2: [{rank: 1, name: '皇家馬德里', win: 29, lose: 2, pct: '95 pts'}, {rank: 2, name: '巴塞隆納', win: 26, lose: 5, pct: '85 pts'}]
-            }
+            npb: { title1: '日本職棒 - 中央聯盟 (Central)', title2: '日本職棒 - 太平洋聯盟 (Pacific)', col1: [{rank: 1, name: '阪神虎', win: 81, lose: 59, pct: '.579'}], col2: [{rank: 1, name: '福岡軟銀鷹', win: 88, lose: 52, pct: '.629'}] },
+            mlb: { title1: '美國聯盟 (American League)', title2: '國家聯盟 (National League)', col1: [{rank: 1, name: '紐約洋基', win: 94, lose: 68, pct: '.580'}], col2: [{rank: 1, name: '洛杉磯道奇', win: 98, lose: 64, pct: '.605'}] },
+            nba: { title1: '東區聯盟 (Eastern Conference)', title2: '西區聯盟 (Western Conference)', col1: [{rank: 1, name: '塞爾提克', win: 52, lose: 15, pct: '.776'}], col2: [{rank: 1, name: '丹佛金塊', win: 48, lose: 20, pct: '.706'}] },
+            football: { title1: '英格蘭超級聯賽 (Premier League)', title2: '西班牙甲級聯賽 (La Liga)', col1: [{rank: 1, name: '曼城', win: 28, lose: 4, pct: '88 pts'}], col2: [{rank: 1, name: '皇家馬德里', win: 29, lose: 2, pct: '95 pts'}] }
         };
 
         let currentMatch = sportsData[0];
         let currentLeague = 'npb';
 
-        // 依分類篩選橫排賽事卡片
         function filterCategory(cat) {
             currentCat = cat;
             ['all', 'npb', 'mlb', 'nba', 'football'].forEach(c => {
@@ -444,19 +315,12 @@
             renderMatchHorizontalList();
         }
 
-        // 渲染橫向賽事選擇卡片
         function renderMatchHorizontalList() {
             const listEl = document.getElementById('match-horizontal-list');
             listEl.innerHTML = '';
             const t = translations[currentLang];
-            
             const filteredData = currentCat === 'all' ? sportsData : sportsData.filter(m => m.category === currentCat);
             
-            if (filteredData.length === 0) {
-                listEl.innerHTML = `<div class="text-xs text-slate-500 py-4">今日暫無賽事數據</div>`;
-                return;
-            }
-
             filteredData.forEach(m => {
                 const isSelected = currentMatch.id === m.id;
                 const card = document.createElement('div');
@@ -464,10 +328,7 @@
                 card.onclick = () => { currentMatch = m; renderMatchHorizontalList(); renderVisualBoard(m); };
                 card.innerHTML = `
                     <div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-zcGold uppercase tracking-wider">${m.type}</span>
-                            <span class="text-[10px] text-red-400 font-bold animate-pulse">● LIVE</span>
-                        </div>
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-zcGold uppercase">${m.type}</span><span class="text-[10px] text-red-400 font-bold animate-pulse">● LIVE</span></div>
                         <div class="text-sm font-bold text-slate-100 mt-1 truncate">${m.title}</div>
                     </div>
                     <div class="flex justify-between items-end mt-3 pt-2 border-t border-neutral-900">
@@ -487,164 +348,49 @@
                 const s = match.inningScores;
                 const b = match.details.bases;
                 board.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚾ ${match.type} 一球速報</span>
-                        <span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span>
-                    </div>
-
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚾ ${match.type} 一球速報</span><span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span></div>
                     <div class="overflow-x-auto my-3 bg-neutral-950 p-3 rounded-2xl border border-neutral-800">
                         <table class="w-full text-center text-xs border-collapse">
-                            <thead>
-                                <tr class="text-slate-400 border-b border-neutral-800">
-                                    <th class="p-2 text-left font-bold text-zcGold">球隊</th>
-                                    ${[1,2,3,4,5,6,7,8,9].map(i => `<th class="p-1.5 w-7">${i}</th>`).join('')}
-                                    <th class="p-2 text-zcGold font-bold">R</th>
-                                    <th class="p-2">H</th>
-                                    <th class="p-2">E</th>
-                                </tr>
-                            </thead>
+                            <thead><tr class="text-slate-400 border-b border-neutral-800"><th class="p-2 text-left font-bold text-zcGold">球隊</th>${[1,2,3,4,5,6,7,8,9].map(i => `<th class="p-1.5 w-7">${i}</th>`).join('')}<th class="p-2 text-zcGold font-bold">R</th><th class="p-2">H</th><th class="p-2">E</th></tr></thead>
                             <tbody class="divide-y divide-neutral-800/60 font-semibold text-slate-200">
-                                <tr>
-                                    <td class="p-2 text-left font-bold text-white">${s.teams[0]}</td>
-                                    ${s.scores[0].map(v => `<td class="p-1.5">${v}</td>`).join('')}
-                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[0][0]}</td>
-                                    <td class="p-2">${s.stats[0][1]}</td>
-                                    <td class="p-2 text-slate-400">${s.stats[0][2]}</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 text-left font-bold text-white">${s.teams[1]}</td>
-                                    ${s.scores[1].map(v => `<td class="p-1.5">${v}</td>`).join('')}
-                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[1][0]}</td>
-                                    <td class="p-2">${s.stats[1][1]}</td>
-                                    <td class="p-2 text-slate-400">${s.stats[1][2]}</td>
-                                </tr>
+                                <tr><td class="p-2 text-left font-bold text-white">${s.teams[0]}</td>${s.scores[0].map(v => `<td class="p-1.5">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[0][0]}</td><td class="p-2">${s.stats[0][1]}</td><td class="p-2 text-slate-400">${s.stats[0][2]}</td></tr>
+                                <tr><td class="p-2 text-left font-bold text-white">${s.teams[1]}</td>${s.scores[1].map(v => `<td class="p-1.5">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${s.stats[1][0]}</td><td class="p-2">${s.stats[1][1]}</td><td class="p-2 text-slate-400">${s.stats[1][2]}</td></tr>
                             </tbody>
                         </table>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 items-center bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800">
-                        <div class="space-y-1.5 text-xs text-slate-300">
-                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.pitcherLabel}</span>
-                            <div class="text-sm font-bold text-white">${match.details.pitcher.name}</div>
-                            <div>ERA: <span class="text-zcGold font-bold">${match.details.pitcher.era}</span></div>
-                            <div class="text-[11px] text-slate-400">${match.details.pitcher.stats}</div>
-                        </div>
-
+                        <div class="space-y-1.5 text-xs text-slate-300"><span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.pitcherLabel}</span><div class="text-sm font-bold text-white">${match.details.pitcher.name}</div><div>ERA: <span class="text-zcGold font-bold">${match.details.pitcher.era}</span></div></div>
                         <div class="flex flex-col items-center justify-center space-y-3">
                             <div class="relative w-24 h-24 bg-emerald-950/40 border border-emerald-600/40 rounded-xl flex items-center justify-center">
                                 <div class="absolute top-2 w-5 h-5 rotate-45 ${b.second ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-slate-600"></div>
                                 <div class="absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 rotate-45 ${b.third ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-slate-600"></div>
                                 <div class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rotate-45 ${b.first ? 'bg-zcGold shadow-lg shadow-zcGold' : 'bg-neutral-800'} border border-slate-600"></div>
-                                <span class="text-[10px] text-emerald-400 font-bold mt-6">INFIELD</span>
-                            </div>
-                            
-                            <div class="flex space-x-3 text-xs font-bold bg-neutral-950 px-3 py-1.5 rounded-xl border border-neutral-800">
-                                <div class="flex items-center space-x-1"><span class="text-slate-400">B</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 1 ? 'bg-emerald-400' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 2 ? 'bg-emerald-400' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.balls >= 3 ? 'bg-emerald-400' : 'bg-neutral-800'}"></span></div>
-                                <div class="flex items-center space-x-1"><span class="text-slate-400">S</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.strikes >= 1 ? 'bg-amber-400' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.strikes >= 2 ? 'bg-amber-400' : 'bg-neutral-800'}"></span></div>
-                                <div class="flex items-center space-x-1"><span class="text-slate-400">O</span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.outs >= 1 ? 'bg-red-500' : 'bg-neutral-800'}"></span><span class="w-2.5 h-2.5 rounded-full ${match.details.bso.outs >= 2 ? 'bg-red-500' : 'bg-neutral-800'}"></span></div>
                             </div>
                         </div>
-
-                        <div class="space-y-1.5 text-xs text-slate-300 text-left md:text-right">
-                            <span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.batterLabel}</span>
-                            <div class="text-sm font-bold text-white">${match.details.batter.name}</div>
-                            <div>AVG: <span class="text-zcGold font-bold">${match.details.batter.avg}</span></div>
-                            <div class="text-[11px] text-slate-400">${match.details.batter.today}</div>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-center font-bold text-zcGold bg-neutral-900 p-3 rounded-xl border border-neutral-800">
-                        ${match.details.lastPitch}
+                        <div class="space-y-1.5 text-xs text-slate-300 text-left md:text-right"><span class="text-[10px] font-bold text-zcGold uppercase bg-zcGold/10 px-2 py-0.5 rounded">${t.batterLabel}</span><div class="text-sm font-bold text-white">${match.details.batter.name}</div><div>AVG: <span class="text-zcGold font-bold">${match.details.batter.avg}</span></div></div>
                     </div>
                 `;
             } else if (match.category === 'nba') {
-                const q = match.quarters;
-                const l = match.lineups;
+                const q = match.quarters; const l = match.lineups;
                 board.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">🏀 ${match.type} 即時戰情與陣容</span>
-                        <span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span>
-                    </div>
-
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">🏀 ${match.type}</span><span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span></div>
                     <div class="overflow-x-auto my-3 bg-neutral-950 p-3 rounded-2xl border border-neutral-800">
                         <table class="w-full text-center text-xs border-collapse">
-                            <thead>
-                                <tr class="text-slate-400 border-b border-neutral-800">
-                                    <th class="p-2 text-left font-bold text-zcGold">球隊</th>
-                                    <th class="p-2">Q1</th><th class="p-2">Q2</th><th class="p-2">Q3</th><th class="p-2">Q4</th>
-                                    <th class="p-2 text-zcGold font-bold">Total</th>
-                                </tr>
-                            </thead>
+                            <thead><tr class="text-slate-400 border-b border-neutral-800"><th class="p-2 text-left font-bold text-zcGold">球隊</th><th class="p-2">Q1</th><th class="p-2">Q2</th><th class="p-2">Q3</th><th class="p-2">Q4</th><th class="p-2 text-zcGold font-bold">Total</th></tr></thead>
                             <tbody class="divide-y divide-neutral-800/60 font-semibold text-slate-200">
-                                <tr>
-                                    <td class="p-2 text-left font-bold text-white">${q.teams[0]}</td>
-                                    ${q.scores[0].map(v => `<td class="p-2">${v}</td>`).join('')}
-                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${q.total[0]}</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 text-left font-bold text-white">${q.teams[1]}</td>
-                                    ${q.scores[1].map(v => `<td class="p-2">${v}</td>`).join('')}
-                                    <td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${q.total[1]}</td>
-                                </tr>
+                                <tr><td class="p-2 text-left font-bold text-white">${q.teams[0]}</td>${q.scores[0].map(v => `<td class="p-2">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${q.total[0]}</td></tr>
+                                <tr><td class="p-2 text-left font-bold text-white">${q.teams[1]}</td>${q.scores[1].map(v => `<td class="p-2">${v}</td>`).join('')}<td class="p-2 font-black text-zcGold text-sm bg-neutral-900">${q.total[1]}</td></tr>
                             </tbody>
                         </table>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-                        <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800">
-                            <h4 class="text-xs font-bold text-zcGold mb-2 pb-1 border-b border-neutral-800">🔵 ${q.teams[0]} 球員表現</h4>
-                            <div class="space-y-2 text-xs">
-                                ${l.away.map(p => `
-                                    <div class="flex justify-between items-center text-slate-300">
-                                        <span class="font-bold text-white">${p.name}</span>
-                                        <span class="text-zcGold font-semibold">${p.pts} | ${p.ast} | ${p.reb}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800">
-                            <h4 class="text-xs font-bold text-zcGold mb-2 pb-1 border-b border-neutral-800">🔴 ${q.teams[1]} 球員表現</h4>
-                            <div class="space-y-2 text-xs">
-                                ${l.home.map(p => `
-                                    <div class="flex justify-between items-center text-slate-300">
-                                        <span class="font-bold text-white">${p.name}</span>
-                                        <span class="text-zcGold font-semibold">${p.pts} | ${p.reb} | ${p.ast}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
                     </div>
                 `;
             } else {
                 const d = match.details;
                 board.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚽ ${match.type} 現場即時中心</span>
-                        <span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span>
-                    </div>
-                    <div class="text-center my-3">
-                        <div class="text-xl md:text-2xl font-black text-white">${match.title}</div>
-                        <div class="text-3xl md:text-4xl font-black text-zcGold gold-glow my-2">${match.score}</div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 text-xs my-3">
-                        <div class="bg-neutral-900 p-2.5 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">${d.possessionRate}</div>
-                        <div class="bg-neutral-900 p-2.5 rounded-xl border border-neutral-800 text-center font-bold text-slate-300">${d.shotsTotal}</div>
-                    </div>
-                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 my-3">
-                        <h4 class="text-xs font-bold text-zcGold mb-2 pb-1 border-b border-neutral-800">⚽ 進球記錄</h4>
-                        <div class="space-y-1.5 text-xs text-slate-300">
-                            ${d.goals.map(g => `
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-zcGold font-bold">${g.time}</span>
-                                    <span>${g.type}：</span>
-                                    <span class="text-white font-semibold">${g.player}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
+                    <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-zcGold bg-zcGold/10 px-3 py-1 rounded-full border border-zcGold/20">⚽ ${match.type}</span><span class="text-xs text-red-400 animate-pulse font-bold">● ${match.status}</span></div>
+                    <div class="text-center my-3"><div class="text-xl md:text-2xl font-black text-white">${match.title}</div><div class="text-3xl md:text-4xl font-black text-zcGold gold-glow my-2">${match.score}</div></div>
                 `;
             }
-            document.getElementById('highlight-player').src = match.highlightUrl;
         }
 
         function switchMainTab(tab) {
@@ -654,13 +400,11 @@
             const navStandings = document.getElementById('nav-standings');
 
             if (tab === 'scores') {
-                scoresSec.classList.remove('hidden');
-                standingsSec.classList.add('hidden');
+                scoresSec.classList.remove('hidden'); standingsSec.classList.add('hidden');
                 navScores.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
                 navStandings.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
             } else {
-                scoresSec.classList.add('hidden');
-                standingsSec.classList.remove('hidden');
+                scoresSec.classList.add('hidden'); standingsSec.classList.remove('hidden');
                 navStandings.className = "px-4 py-2 rounded-xl bg-zcGold text-black font-bold transition shadow-lg shadow-zcGold/20";
                 navScores.className = "px-4 py-2 rounded-xl text-slate-300 hover:text-zcGold transition";
                 switchLeague('npb');
@@ -671,71 +415,17 @@
             currentLeague = leagueKey;
             ['npb', 'mlb', 'nba', 'football'].forEach(l => {
                 const btn = document.getElementById(`btn-league-${l}`);
-                if (l === leagueKey) {
-                    btn.className = "px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition";
-                } else {
-                    btn.className = "px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700";
-                }
+                if (l === leagueKey) btn.className = "px-3 py-1.5 rounded-lg bg-zcGold text-black font-bold transition";
+                else btn.className = "px-3 py-1.5 rounded-lg bg-neutral-800 text-slate-300 hover:text-zcGold transition border border-neutral-700";
             });
-
-            const data = standingsData[leagueKey];
-            const t = translations[currentLang];
-            const container = document.getElementById('standings-content');
-            
+            const data = standingsData[leagueKey]; const t = translations[currentLang]; const container = document.getElementById('standings-content');
             container.innerHTML = `
-                <div class="bg-neutral-900/60 p-5 rounded-2xl border border-neutral-800">
-                    <h3 class="text-sm font-bold text-slate-300 mb-4 pb-2 border-b border-neutral-800">${data.title1}</h3>
-                    <table class="w-full text-left text-xs">
-                        <thead>
-                            <tr class="text-slate-500 border-b border-neutral-800">
-                                <th class="pb-2">${t.rankTeam}</th>
-                                <th class="pb-2 text-center">${t.win}</th>
-                                <th class="pb-2 text-center">${t.lose}</th>
-                                <th class="pb-2 text-right">${t.pct}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-neutral-800/50 text-slate-300">
-                            ${data.col1.map(item => `
-                                <tr>
-                                    <td class="py-2.5 font-bold ${item.rank === 1 ? 'text-zcGold' : 'text-slate-200'}">${item.rank}. ${item.name}</td>
-                                    <td class="text-center">${item.win}</td>
-                                    <td class="text-center">${item.lose}</td>
-                                    <td class="text-right font-semibold">${item.pct}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="bg-neutral-900/60 p-5 rounded-2xl border border-neutral-800">
-                    <h3 class="text-sm font-bold text-slate-300 mb-4 pb-2 border-b border-neutral-800">${data.title2}</h3>
-                    <table class="w-full text-left text-xs">
-                        <thead>
-                            <tr class="text-slate-500 border-b border-neutral-800">
-                                <th class="pb-2">${t.rankTeam}</th>
-                                <th class="pb-2 text-center">${t.win}</th>
-                                <th class="pb-2 text-center">${t.lose}</th>
-                                <th class="pb-2 text-right">${t.pct}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-neutral-800/50 text-slate-300">
-                            ${data.col2.map(item => `
-                                <tr>
-                                    <td class="py-2.5 font-bold ${item.rank === 1 ? 'text-zcGold' : 'text-slate-200'}">${item.rank}. ${item.name}</td>
-                                    <td class="text-center">${item.win}</td>
-                                    <td class="text-center">${item.lose}</td>
-                                    <td class="text-right font-semibold">${item.pct}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
+                <div class="bg-neutral-900/60 p-5 rounded-2xl border border-neutral-800"><h3 class="text-sm font-bold text-slate-300 mb-4 pb-2 border-b border-neutral-800">${data.title1}</h3><table class="w-full text-left text-xs"><thead><tr class="text-slate-500 border-b border-neutral-800"><th class="pb-2">${t.rankTeam}</th><th class="pb-2 text-center">${t.win}</th><th class="pb-2 text-center">${t.lose}</th><th class="pb-2 text-right">${t.pct}</th></tr></thead><tbody class="divide-y divide-neutral-800/50 text-slate-300">${data.col1.map(item => `<tr><td class="py-2.5 font-bold text-zcGold">${item.rank}. ${item.name}</td><td class="text-center">${item.win}</td><td class="text-center">${item.lose}</td><td class="text-right font-semibold">${item.pct}</td></tr>`).join('')}</tbody></table></div>
+                <div class="bg-neutral-900/60 p-5 rounded-2xl border border-neutral-800"><h3 class="text-sm font-bold text-slate-300 mb-4 pb-2 border-b border-neutral-800">${data.title2}</h3><table class="w-full text-left text-xs"><thead><tr class="text-slate-500 border-b border-neutral-800"><th class="pb-2">${t.rankTeam}</th><th class="pb-2 text-center">${t.win}</th><th class="pb-2 text-center">${t.lose}</th><th class="pb-2 text-right">${t.pct}</th></tr></thead><tbody class="divide-y divide-neutral-800/50 text-slate-300">${data.col2.map(item => `<tr><td class="py-2.5 font-bold text-zcGold">${item.rank}. ${item.name}</td><td class="text-center">${item.win}</td><td class="text-center">${item.lose}</td><td class="text-right font-semibold">${item.pct}</td></tr>`).join('')}</tbody></table></div>
             `;
         }
 
-        window.onload = () => {
-            renderMatchHorizontalList();
-            renderVisualBoard(currentMatch);
-        };
+        window.onload = () => { renderMatchHorizontalList(); renderVisualBoard(currentMatch); };
     </script>
 </body>
 </html>
